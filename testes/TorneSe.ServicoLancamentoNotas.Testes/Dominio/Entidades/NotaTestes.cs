@@ -1,43 +1,41 @@
-﻿using TorneSe.ServicoLancamentoNotas.Dominio.Constantes;
+﻿using FluentAssertions;
+using TorneSe.ServicoLancamentoNotas.Dominio.Constantes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 using TorneSe.ServicoLancamentoNotas.Dominio.Enums;
 using TorneSe.ServicoLancamentoNotas.Dominio.Exceptions;
 
 namespace TorneSe.ServicoLancamentoNotas.Testes.Dominio.Entidades;
 
+[Collection(nameof(NotaTestesFixture))]
 public class NotaTestes
 {
+    private readonly NotaTestesFixture _fixture;
+    public NotaTestes(NotaTestesFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact(DisplayName = nameof(InstanciarNota))]
     [Trait("Dominio", "Nota - Agregado")]
     public void InstanciarNota()
     {
         //Arrange
-        var valoresEntrada = new 
-        { 
-            AlunoId = 1234, 
-            AtividadeId = 34566, 
-            ValorNota = 10.00, 
-            DataLancamento = DateTime.Now,
-            UsuarioId = 34566,
-            DataAtualizacao = DateTime.Now
-        };
+        var parametrosNota = _fixture.RetornaValoresParametrosNotaValidos();
 
         //Act
-        var nota = new Nota(valoresEntrada.AlunoId, valoresEntrada.AtividadeId, 
-                        valoresEntrada.ValorNota, valoresEntrada.DataLancamento, valoresEntrada.UsuarioId);
+        var nota = new Nota(parametrosNota);
 
         //Assert
-        Assert.NotNull(nota);
-        Assert.Equal(valoresEntrada.AlunoId, nota.AlunoId);
-        Assert.Equal(valoresEntrada.AtividadeId, nota.AtividadeId);
-        Assert.Equal(valoresEntrada.ValorNota, nota.ValorNota);
-        Assert.Equal(valoresEntrada.DataLancamento, nota.DataLancamento);
-        Assert.NotEqual(default, nota.DataLancamento);
-        Assert.NotEqual(default, nota.DataAtualizacao);
-        Assert.Equal(valoresEntrada.UsuarioId, nota.UsuarioId);
-        Assert.False(nota.CanceladaPorRetentativa);
-        Assert.Equal(StatusIntegracao.AguardandoIntegracao, nota.StatusIntegracao);
-        Assert.Null(nota.MotivoCancelamento);
+        nota.Should().NotBeNull();
+        nota.AlunoId.Should().Be(parametrosNota.AlunoId);
+        nota.AtividadeId.Should().Be(parametrosNota.AtividadeId);
+        nota.ValorNota.Should().Be(parametrosNota.ValorNota);
+        nota.DataLancamento.Should().NotBe(default);
+        nota.DataLancamento.Should().Be(parametrosNota.DataLancamento);
+        nota.UsuarioId.Should().Be(parametrosNota.UsuarioId);
+        nota.CanceladaPorRetentativa.Should().BeFalse();
+        nota.StatusIntegracao.Should().Be(StatusIntegracao.AguardandoIntegracao);
+        nota.MotivoCancelamento.Should().BeNull();
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoValorNotaInvalido_DeveLancarExcecao))]
@@ -46,23 +44,19 @@ public class NotaTestes
     [InlineData(11)]
     public void InstanciarNota_QuandoValorNotaInvalido_DeveLancarExcecao(double valorNota)
     {
-        var valoresEntrada = new
-        {
-            AlunoId = 1234,
-            AtividadeId = 34566,
-            ValorNota = valorNota,
-            DataLancamento = DateTime.Now,
-            UsuarioId = 34566,
-            DataAtualizacao = DateTime.Now
-        };
+        //Arrange
+        var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(valorNota : valorNota);
 
         //Act
-        var action = () => new Nota(valoresEntrada.AlunoId, valoresEntrada.AtividadeId,
-                        valoresEntrada.ValorNota, valoresEntrada.DataLancamento, valoresEntrada.UsuarioId);
+        var action = () => new Nota(parametrosNota);
+        var nota = new Nota(parametrosNota);
 
-        var exception = Assert.Throws<ValidacaoEntidadeException>(action);
-        Assert.NotNull(exception);
-        Assert.Equal(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO, exception.Message);
+        //Assert
+        nota.EhValida.Should().BeFalse();
+        nota.Notificacoes.Count().Should().BeGreaterThanOrEqualTo(1);
+        nota.Notificacoes.Should().Contains(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
+        action.Should().ThrowExactly<ValidacaoEntidadeException>()
+            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoUsuarioIdInvalido_DeveLancarExcecao))]
@@ -71,23 +65,13 @@ public class NotaTestes
     [InlineData(0)]
     public void InstanciarNota_QuandoUsuarioIdInvalido_DeveLancarExcecao(int usuarioId)
     {
-        var valoresEntrada = new
-        {
-            AlunoId = 1234,
-            AtividadeId = 34566,
-            ValorNota = 10,
-            DataLancamento = DateTime.Now,
-            UsuarioId = usuarioId,
-            DataAtualizacao = DateTime.Now
-        };
+        var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(usuarioId: usuarioId);
 
         //Act
-        var action = () => new Nota(valoresEntrada.AlunoId, valoresEntrada.AtividadeId,
-                        valoresEntrada.ValorNota, valoresEntrada.DataLancamento, valoresEntrada.UsuarioId);
+        var action = () => new Nota(parametrosNota);
 
-        var exception = Assert.Throws<ValidacaoEntidadeException>(action);
-        Assert.NotNull(exception);
-        Assert.Equal(ConstantesDominio.MensagensValidacoes.ERRO_USUARIO_INVALIDO, exception.Message);
+        action.Should().ThrowExactly<ValidacaoEntidadeException>()
+            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_USUARIO_INVALIDO);
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoAlunoIdInvalido_DeveLancarExcecao))]
@@ -96,23 +80,13 @@ public class NotaTestes
     [InlineData(0)]
     public void InstanciarNota_QuandoAlunoIdInvalido_DeveLancarExcecao(int alunoId)
     {
-        var valoresEntrada = new
-        {
-            AlunoId = alunoId,
-            AtividadeId = 34566,
-            ValorNota = 10,
-            DataLancamento = DateTime.Now,
-            UsuarioId = 34566,
-            DataAtualizacao = DateTime.Now
-        };
+        var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(alunoId: alunoId);
 
         //Act
-        var action = () => new Nota(valoresEntrada.AlunoId, valoresEntrada.AtividadeId,
-                        valoresEntrada.ValorNota, valoresEntrada.DataLancamento, valoresEntrada.UsuarioId);
+        var action = () => new Nota(parametrosNota);
 
-        var exception = Assert.Throws<ValidacaoEntidadeException>(action);
-        Assert.NotNull(exception);
-        Assert.Equal(ConstantesDominio.MensagensValidacoes.ERRO_ALUNO_INVALIDO, exception.Message);
+        action.Should().ThrowExactly<ValidacaoEntidadeException>()
+            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_ALUNO_INVALIDO);
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoAtividadeIdInvalida_DeveLancarExcecao))]
@@ -121,23 +95,13 @@ public class NotaTestes
     [InlineData(0)]
     public void InstanciarNota_QuandoAtividadeIdInvalida_DeveLancarExcecao(int atividadeId)
     {
-        var valoresEntrada = new
-        {
-            AlunoId = 1234,
-            AtividadeId = atividadeId,
-            ValorNota = 10,
-            DataLancamento = DateTime.Now,
-            UsuarioId = 34566,
-            DataAtualizacao = DateTime.Now
-        };
+        var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(atividadeId: atividadeId);
 
         //Act
-        var action = () => new Nota(valoresEntrada.AlunoId, valoresEntrada.AtividadeId,
-                        valoresEntrada.ValorNota, valoresEntrada.DataLancamento, valoresEntrada.UsuarioId);
+        var action = () => new Nota(parametrosNota);
 
-        var exception = Assert.Throws<ValidacaoEntidadeException>(action);
-        Assert.NotNull(exception);
-        Assert.Equal(ConstantesDominio.MensagensValidacoes.ERRO_ATIVIDADE_INVALIDA, exception.Message);
+        action.Should().ThrowExactly<ValidacaoEntidadeException>()
+            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_ATIVIDADE_INVALIDA);
     }
 
     //Preciso controlar se a nota lançada já foi integrada
