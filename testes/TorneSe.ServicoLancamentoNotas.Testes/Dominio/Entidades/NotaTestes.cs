@@ -2,7 +2,7 @@
 using TorneSe.ServicoLancamentoNotas.Dominio.Constantes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 using TorneSe.ServicoLancamentoNotas.Dominio.Enums;
-using TorneSe.ServicoLancamentoNotas.Dominio.Exceptions;
+using TorneSe.ServicoLancamentoNotas.Dominio.SeedWork;
 
 namespace TorneSe.ServicoLancamentoNotas.Testes.Dominio.Entidades;
 
@@ -36,6 +36,8 @@ public class NotaTestes
         nota.CanceladaPorRetentativa.Should().BeFalse();
         nota.StatusIntegracao.Should().Be(StatusIntegracao.AguardandoIntegracao);
         nota.MotivoCancelamento.Should().BeNull();
+        nota.Should().BeAssignableTo<NotifiableObject>();
+        nota.EhValida.Should().BeTrue();
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoValorNotaInvalido_DeveLancarExcecao))]
@@ -48,15 +50,14 @@ public class NotaTestes
         var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(valorNota : valorNota);
 
         //Act
-        var action = () => new Nota(parametrosNota);
         var nota = new Nota(parametrosNota);
 
         //Assert
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.Notificacoes.Should().HaveCount(1);
+        nota.Notificacoes.First().Campo.Should().Be(nameof(nota.ValorNota));
+        nota.Notificacoes.First().Mensagem.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
         nota.EhValida.Should().BeFalse();
-        nota.Notificacoes.Count().Should().BeGreaterThanOrEqualTo(1);
-        nota.Notificacoes.Should().Contains(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
-        action.Should().ThrowExactly<ValidacaoEntidadeException>()
-            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoUsuarioIdInvalido_DeveLancarExcecao))]
@@ -68,10 +69,14 @@ public class NotaTestes
         var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(usuarioId: usuarioId);
 
         //Act
-        var action = () => new Nota(parametrosNota);
+        var nota = new Nota(parametrosNota);
 
-        action.Should().ThrowExactly<ValidacaoEntidadeException>()
-            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_USUARIO_INVALIDO);
+        //Assert
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.Notificacoes.Should().HaveCount(1);
+        nota.Notificacoes.First().Campo.Should().Be(nameof(nota.UsuarioId));
+        nota.Notificacoes.First().Mensagem.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_USUARIO_INVALIDO);
+        nota.EhValida.Should().BeFalse();
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoAlunoIdInvalido_DeveLancarExcecao))]
@@ -83,10 +88,13 @@ public class NotaTestes
         var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(alunoId: alunoId);
 
         //Act
-        var action = () => new Nota(parametrosNota);
+        var nota = new Nota(parametrosNota);
 
-        action.Should().ThrowExactly<ValidacaoEntidadeException>()
-            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_ALUNO_INVALIDO);
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.Notificacoes.Should().HaveCount(1);
+        nota.Notificacoes.First().Campo.Should().Be(nameof(nota.AlunoId));
+        nota.Notificacoes.First().Mensagem.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_ALUNO_INVALIDO);
+        nota.EhValida.Should().BeFalse();
     }
 
     [Theory(DisplayName = nameof(InstanciarNota_QuandoAtividadeIdInvalida_DeveLancarExcecao))]
@@ -98,10 +106,13 @@ public class NotaTestes
         var parametrosNota = _fixture.RetornaValoresParametrosInvalidosCustomizados(atividadeId: atividadeId);
 
         //Act
-        var action = () => new Nota(parametrosNota);
+        var nota = new Nota(parametrosNota);
 
-        action.Should().ThrowExactly<ValidacaoEntidadeException>()
-            .And.Message.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_ATIVIDADE_INVALIDA);
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.Notificacoes.Should().HaveCount(1);
+        nota.Notificacoes.First().Campo.Should().Be(nameof(nota.AtividadeId));
+        nota.Notificacoes.First().Mensagem.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_ATIVIDADE_INVALIDA);
+        nota.EhValida.Should().BeFalse();
     }
 
     //Preciso controlar se a nota lançada já foi integrada

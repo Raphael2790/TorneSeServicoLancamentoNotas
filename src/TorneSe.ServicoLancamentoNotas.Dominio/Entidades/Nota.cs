@@ -1,13 +1,15 @@
 ﻿using TorneSe.ServicoLancamentoNotas.Dominio.Constantes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Enums;
-using TorneSe.ServicoLancamentoNotas.Dominio.Exceptions;
 using TorneSe.ServicoLancamentoNotas.Dominio.Params;
 using TorneSe.ServicoLancamentoNotas.Dominio.SeedWork;
+using TorneSe.ServicoLancamentoNotas.Dominio.Validacoes;
 
 namespace TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 
 public class Nota : Entidade, IRaizAgregacao
 {
+    private const double VALOR_MAXIMO_NOTA = 10.00;
+
     public int AlunoId { get; private set; }
     public int AtividadeId { get; private set; }
     public double ValorNota { get; private set; }
@@ -32,13 +34,17 @@ public class Nota : Entidade, IRaizAgregacao
 
     private void Validar()
     {
-        if(ValorNota < default(double) || ValorNota > 10)
-            throw new ValidacaoEntidadeException(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
-        if (UsuarioId <= default(int))
-            throw new ValidacaoEntidadeException(ConstantesDominio.MensagensValidacoes.ERRO_USUARIO_INVALIDO);
-        if (AlunoId <= default(int))
-            throw new ValidacaoEntidadeException(ConstantesDominio.MensagensValidacoes.ERRO_ALUNO_INVALIDO);
-        if (AtividadeId <= default(int))
-            throw new ValidacaoEntidadeException(ConstantesDominio.MensagensValidacoes.ERRO_ATIVIDADE_INVALIDA);
+        ValidacoesDominio
+            .DeveEstarEntre(ValorNota, default, VALOR_MAXIMO_NOTA, this, nameof(ValorNota),
+            ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
+        ValidacoesDominio
+            .MaiorQue(UsuarioId, default, this, nameof(UsuarioId), ConstantesDominio.MensagensValidacoes.ERRO_USUARIO_INVALIDO);
+        ValidacoesDominio
+            .MaiorQue(AlunoId, default, this, nameof(AlunoId), ConstantesDominio.MensagensValidacoes.ERRO_ALUNO_INVALIDO);
+        ValidacoesDominio
+             .MaiorQue(AtividadeId, default, this, nameof(AtividadeId), ConstantesDominio.MensagensValidacoes.ERRO_ATIVIDADE_INVALIDA);
+
+        if (!Notificacoes.Any())
+            EhValida = true;
     }
 }

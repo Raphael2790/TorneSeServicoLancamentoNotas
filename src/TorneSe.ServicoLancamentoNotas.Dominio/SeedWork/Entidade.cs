@@ -1,6 +1,6 @@
 ﻿namespace TorneSe.ServicoLancamentoNotas.Dominio.SeedWork;
 
-public abstract class Entidade
+public abstract class Entidade : NotifiableObject
 {
     public Guid Id { get; set; }
     public DateTime DataAtualizacao { get; protected set; }
