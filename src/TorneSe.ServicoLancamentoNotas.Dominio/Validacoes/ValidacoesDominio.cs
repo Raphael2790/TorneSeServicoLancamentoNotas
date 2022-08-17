@@ -1,4 +1,5 @@
-﻿using TorneSe.ServicoLancamentoNotas.Dominio.SeedWork;
+﻿using FluentValidation;
+using TorneSe.ServicoLancamentoNotas.Dominio.SeedWork;
 
 namespace TorneSe.ServicoLancamentoNotas.Dominio.Validacoes;
 
@@ -21,5 +22,13 @@ public static class ValidacoesDominio
     {
         if(texto.Length > numeroMaximoCaracteres)
             objetoNotificavel.Notificar(new Notificacao(nomeCampo, mensagem));
+    }
+
+    public static void Validar<TModel>(TModel objetoNotificavel, AbstractValidator<TModel> validador)
+        where TModel : NotifiableObject
+    {
+        var validadorResultado = validador.Validate(objetoNotificavel);
+        objetoNotificavel.EhValida = validadorResultado.IsValid;
+        validadorResultado.Errors.ForEach(x => objetoNotificavel.Notificar(new(x.PropertyName, x.ErrorMessage)));
     }
 }
