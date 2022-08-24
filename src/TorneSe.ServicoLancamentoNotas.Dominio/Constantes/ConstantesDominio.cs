@@ -12,4 +12,9 @@ public static class ConstantesDominio
         public const string ERRO_MOTIVO_CANCELAMENTO_NAO_INFORMADO = "O motivo do cancelamento deve ser informado";
         public const string ERRO_FLAG_CANCELADA_INATIVA = "A flag de cancelamento deve ser marcada";
     }
+
+    public static class Mensagens
+    {
+        public const string NOTA_CANCELADA_POR_RETENTATIVA = "O aluno recebeu uma nova oportunidade de refazer a atividade";
+    }
 }

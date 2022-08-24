@@ -27,11 +27,15 @@ public class NotaTestes
 
         //Assert
         nota.Should().NotBeNull();
+        nota.Id.Should().NotBeEmpty();
+        nota.Id.Should().NotBe(Guid.Empty);
         nota.AlunoId.Should().Be(parametrosNota.AlunoId);
         nota.AtividadeId.Should().Be(parametrosNota.AtividadeId);
         nota.ValorNota.Should().Be(parametrosNota.ValorNota);
         nota.DataLancamento.Should().NotBe(default);
         nota.DataLancamento.Should().Be(parametrosNota.DataLancamento);
+        nota.DataCriacao.Should().NotBe(default);
+        nota.DataCriacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         nota.UsuarioId.Should().Be(parametrosNota.UsuarioId);
         nota.CanceladaPorRetentativa.Should().BeFalse();
         nota.Cancelada.Should().BeFalse();
@@ -139,7 +143,7 @@ public class NotaTestes
         nota.Cancelada.Should().BeFalse();
     }
 
-    [Fact(DisplayName = nameof(Cancelar_QuandoNaoInformadoMotivo_DevePossuirNotificacao))]
+    [Fact(DisplayName = nameof(Cancelar_QuandoInformadoMotivoExtenso_DevePossuirNotificacao))]
     [Trait("Dominio", "Nota - Agregado")]
     public void Cancelar_QuandoInformadoMotivoExtenso_DevePossuirNotificacao()
     {
@@ -161,7 +165,7 @@ public class NotaTestes
         nota.EhValida.Should().BeFalse();
     }
 
-    [Fact(DisplayName = nameof(Cancelar_QuandoNaoInformadoMotivo_DevePossuirNotificacao))]
+    [Fact(DisplayName = nameof(Cancelar_QuandoInformadoMotivo_NaoDevePossuirNotificacao))]
     [Trait("Dominio", "Nota - Agregado")]
     public void Cancelar_QuandoInformadoMotivo_NaoDevePossuirNotificacao()
     {
@@ -177,9 +181,104 @@ public class NotaTestes
         nota.Notificacoes.Should().BeEmpty();
         nota.EhValida.Should().BeTrue();
         nota.Cancelada.Should().BeTrue();
+        nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
     }
 
-    //Preciso controlar se a nota lançada já foi integrada
-    //Caso uma nota venha a ser cancelada preciso de um motivo para o cancelamento
-    //Uma valor de nota deve estar no intervalo entre 0 a 10
+    [Fact(DisplayName = nameof(CancelarPorRetentativa_QuandoSolitadoCancelamento_NaoDevePossuirNotificacao))]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void CancelarPorRetentativa_QuandoSolitadoCancelamento_NaoDevePossuirNotificacao()
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.CancelarPorRetentativa();
+
+        //Assertt
+        nota.Notificacoes.Should().BeEmpty();
+        nota.EhValida.Should().BeTrue();
+        nota.Cancelada.Should().BeTrue();
+        nota.CanceladaPorRetentativa.Should().BeTrue();
+        nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+    }
+
+    [Theory(DisplayName = nameof(AtualizarValorNota_QuandoInformadoValoresInvalidos_DevePossuirNotificacao))]
+    [Trait("Dominio", "Nota - Agregado")]
+    [InlineData(-1)]
+    [InlineData(11)]
+    public void AtualizarValorNota_QuandoInformadoValoresInvalidos_DevePossuirNotificacao(double novoValorNota)
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.AtualizarValorNota(novoValorNota);
+
+        //Assertt
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.EhValida.Should().BeFalse();
+        nota.Notificacoes.Should().HaveCount(1);
+        nota.Notificacoes.First().Campo.Should().Be(nameof(nota.ValorNota));
+        nota.Notificacoes.First().Mensagem.Should().Be(ConstantesDominio.MensagensValidacoes.ERRO_VALOR_NOTA_INVALIDO);
+    }
+
+    [Theory(DisplayName = nameof(AtualizarValorNota_QuandoInformadoValoresInvalidos_DevePossuirNotificacao))]
+    [Trait("Dominio", "Nota - Agregado")]
+    [InlineData(0)]
+    [InlineData(5)]
+    [InlineData(10)]
+    public void AtualizarValorNota_QuandoInformadoValoresValidos_NaoDevePossuirNotificacao(double novoValorNota)
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.AtualizarValorNota(novoValorNota);
+
+        //Assertt
+        nota.Notificacoes.Should().BeEmpty();
+        nota.EhValida.Should().BeTrue();
+        nota.ValorNota.Should().Be(novoValorNota);
+        nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+    }
+
+    [Fact(DisplayName = nameof(AtualizarStatusIntegracao_QuandoInformadoNovoStatus_DeveAtualizarOStatus))]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void AtualizarStatusIntegracao_QuandoInformadoNovoStatus_DeveAtualizarOStatus()
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
+        Nota nota = new(notaParams);
+        var novoStatus = StatusIntegracao.EnviadaParaIntegracao;
+
+        //Act
+        nota.AtualizarStatusIntegracao(novoStatus);
+
+        //Assertt
+        nota.Notificacoes.Should().BeEmpty();
+        nota.EhValida.Should().BeTrue();
+        nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        nota.StatusIntegracao.Should().Be(novoStatus);
+    }
+
+    [Fact(DisplayName = nameof(AtualizarStatusIntegracao_QuandoInformadoNovoStatusInvalido_DevePossuirNotificacao))]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void AtualizarStatusIntegracao_QuandoInformadoNovoStatusInvalido_DevePossuirNotificacao()
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
+        Nota nota = new(notaParams);
+        var novoStatus = StatusIntegracao.IntegradaComSucesso;
+
+        //Act
+        nota.AtualizarStatusIntegracao(novoStatus);
+
+        //Assertt
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.EhValida.Should().BeFalse();
+        nota.Notificacoes.Should().HaveCount(1);
+    }
 }

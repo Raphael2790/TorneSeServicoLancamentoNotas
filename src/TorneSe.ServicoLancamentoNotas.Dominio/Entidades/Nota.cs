@@ -30,7 +30,7 @@ public class Nota : Entidade, IRaizAgregacao
         UsuarioId = notaParams.UsuarioId;
         CanceladaPorRetentativa = false;
         StatusIntegracao = StatusIntegracao.AguardandoIntegracao;
-
+        DataCriacao = DateTime.Now;
         //Validar();
 
         Validar(this, NotaValidador.Instance);
@@ -50,6 +50,40 @@ public class Nota : Entidade, IRaizAgregacao
         }
         MotivoCancelamento = motivoCancelamento;
         Cancelada = true;
+        DataAtualizacao = DateTime.Now;
         Validar(this, NotaValidador.Instance);
+    }
+
+    public void CancelarPorRetentativa()
+    {
+        MotivoCancelamento = ConstantesDominio.Mensagens.NOTA_CANCELADA_POR_RETENTATIVA;
+        Cancelada = true;
+        CanceladaPorRetentativa = true;
+        DataAtualizacao = DateTime.Now;
+        Validar();
+    }
+
+    public void AtualizarValorNota(double novoValorNota)
+    {
+        ValorNota = novoValorNota;
+        DataAtualizacao = DateTime.Now;
+        Validar();
+    }
+
+    public void AtualizarStatusIntegracao(StatusIntegracao novoStatus)
+    {
+        if (StatusIntegracao == StatusIntegracao.AguardandoIntegracao
+            && novoStatus == StatusIntegracao.IntegradaComSucesso
+            || novoStatus == StatusIntegracao.FalhaNaIntegracao)
+        {
+            Notificar(new Notificacao(nameof(StatusIntegracao), 
+                $"Não é permitada a mudança do status {StatusIntegracao} para {novoStatus}"));
+            EhValida = false;
+            return;
+        }
+
+        StatusIntegracao = novoStatus;
+        DataAtualizacao = DateTime.Now;
+        Validar();
     }
 }
