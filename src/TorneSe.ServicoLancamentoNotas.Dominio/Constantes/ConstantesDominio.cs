@@ -16,5 +16,6 @@ public static class ConstantesDominio
     public static class Mensagens
     {
         public const string NOTA_CANCELADA_POR_RETENTATIVA = "O aluno recebeu uma nova oportunidade de refazer a atividade";
+        public const string ALTERACAO_DE_STATUS_NAO_PERMITIDA = "A alteração de status da integração para {0} não pode ser realizada";
     }
 }

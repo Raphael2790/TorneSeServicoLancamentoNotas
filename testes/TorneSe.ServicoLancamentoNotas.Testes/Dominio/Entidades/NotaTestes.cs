@@ -39,7 +39,7 @@ public class NotaTestes
         nota.UsuarioId.Should().Be(parametrosNota.UsuarioId);
         nota.CanceladaPorRetentativa.Should().BeFalse();
         nota.Cancelada.Should().BeFalse();
-        nota.StatusIntegracao.Should().Be(StatusIntegracao.AguardandoIntegracao);
+        nota.StatusIntegracao.Should().Be(parametrosNota.StatusIntegracao);
         nota.MotivoCancelamento.Should().BeNull();
         nota.Should().BeAssignableTo<NotifiableObject>();
         nota.EhValida.Should().BeTrue();
@@ -245,36 +245,37 @@ public class NotaTestes
         nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
     }
 
-    [Fact(DisplayName = nameof(AtualizarStatusIntegracao_QuandoInformadoNovoStatus_DeveAtualizarOStatus))]
+    [Fact(DisplayName = nameof(AlterarStatusIntegracaoParaEnviada_QuandoPermitidoTrocaStatus_DeveAtualizarOStatus))]
     [Trait("Dominio", "Nota - Agregado")]
-    public void AtualizarStatusIntegracao_QuandoInformadoNovoStatus_DeveAtualizarOStatus()
+    public void AlterarStatusIntegracaoParaEnviada_QuandoPermitidoTrocaStatus_DeveAtualizarOStatus()
     {
         //Arrange
         var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
         Nota nota = new(notaParams);
-        var novoStatus = StatusIntegracao.EnviadaParaIntegracao;
 
         //Act
-        nota.AtualizarStatusIntegracao(novoStatus);
+        nota.AlterarStatusIntegracaoParaEnviada();
 
         //Assertt
         nota.Notificacoes.Should().BeEmpty();
         nota.EhValida.Should().BeTrue();
         nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
-        nota.StatusIntegracao.Should().Be(novoStatus);
+        nota.StatusIntegracao.Should().Be(StatusIntegracao.EnviadaParaIntegracao);
     }
 
-    [Fact(DisplayName = nameof(AtualizarStatusIntegracao_QuandoInformadoNovoStatusInvalido_DevePossuirNotificacao))]
+    [Theory(DisplayName = nameof(AlterarStatusIntegracaoParaEnviada_QuandoNaoPermitidoTrocaStatus_DeveAdicionarNotificao))]
+    [InlineData(StatusIntegracao.EnviadaParaIntegracao)]
+    [InlineData(StatusIntegracao.IntegradaComSucesso)]
+    [InlineData(StatusIntegracao.FalhaNaIntegracao)]
     [Trait("Dominio", "Nota - Agregado")]
-    public void AtualizarStatusIntegracao_QuandoInformadoNovoStatusInvalido_DevePossuirNotificacao()
+    public void AlterarStatusIntegracaoParaEnviada_QuandoNaoPermitidoTrocaStatus_DeveAdicionarNotificao(StatusIntegracao statusIntegracao)
     {
         //Arrange
-        var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidosComStatus(statusIntegracao);
         Nota nota = new(notaParams);
-        var novoStatus = StatusIntegracao.IntegradaComSucesso;
 
         //Act
-        nota.AtualizarStatusIntegracao(novoStatus);
+        nota.AlterarStatusIntegracaoParaEnviada();
 
         //Assertt
         nota.Notificacoes.Should().NotBeEmpty();

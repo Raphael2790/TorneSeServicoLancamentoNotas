@@ -7,7 +7,7 @@ using TorneSe.ServicoLancamentoNotas.Dominio.Validacoes.Validador;
 
 namespace TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 
-public class Nota : Entidade, IRaizAgregacao
+public partial class Nota : Entidade, IRaizAgregacao
 {
     private const double VALOR_MAXIMO_NOTA = 10.00;
 
@@ -29,7 +29,7 @@ public class Nota : Entidade, IRaizAgregacao
         DataLancamento = notaParams.DataLancamento;
         UsuarioId = notaParams.UsuarioId;
         CanceladaPorRetentativa = false;
-        StatusIntegracao = StatusIntegracao.AguardandoIntegracao;
+        StatusIntegracao = notaParams.StatusIntegracao;
         DataCriacao = DateTime.Now;
         //Validar();
 
@@ -85,5 +85,25 @@ public class Nota : Entidade, IRaizAgregacao
         StatusIntegracao = novoStatus;
         DataAtualizacao = DateTime.Now;
         Validar();
+    }
+
+    public void AlterarStatusIntegracaoParaEnviada()
+    {
+        ValidarStatus(PodeAlterarStatusParaEnviado, StatusIntegracao.EnviadaParaIntegracao);
+        if(Notificacoes.Any())
+        {
+            EhValida = false;
+            return;
+        }
+        StatusIntegracao = StatusIntegracao.EnviadaParaIntegracao;
+        DataAtualizacao = DateTime.Now;
+        Validar();
+    }
+
+    private void ValidarStatus(Func<bool> podeAlterarStatus, StatusIntegracao proximoStatus)
+    {
+        if (!podeAlterarStatus())
+            Notificar(new(nameof(StatusIntegracao),
+                string.Format(ConstantesDominio.Mensagens.ALTERACAO_DE_STATUS_NAO_PERMITIDA, proximoStatus.ToString())));
     }
 }

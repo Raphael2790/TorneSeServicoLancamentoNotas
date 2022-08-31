@@ -1,4 +1,5 @@
-﻿using TorneSe.ServicoLancamentoNotas.Dominio.Params;
+﻿using TorneSe.ServicoLancamentoNotas.Dominio.Enums;
+using TorneSe.ServicoLancamentoNotas.Dominio.Params;
 using TorneSe.ServicoLancamentoNotas.Testes.Comum;
 
 namespace TorneSe.ServicoLancamentoNotas.Testes.Dominio.Entidades;
@@ -19,6 +20,10 @@ public class NotaTestesFixture : BaseFixture
     public NotaParams RetornaValoresParametrosNotaValidos()
         => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), 
                 RetornaValorNotaAleatorioValido(), DateTime.Now, RetornaNumeroIdRandomico());
+
+    public NotaParams RetornaValoresParametrosNotaValidosComStatus(StatusIntegracao statusIntegracao)
+        => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(),
+                RetornaValorNotaAleatorioValido(), DateTime.Now, RetornaNumeroIdRandomico(),statusIntegracao);
 }
 
 [CollectionDefinition(nameof(NotaTestesFixture))]
