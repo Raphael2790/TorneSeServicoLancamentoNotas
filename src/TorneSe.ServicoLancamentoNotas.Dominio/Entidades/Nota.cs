@@ -70,23 +70,6 @@ public partial class Nota : Entidade, IRaizAgregacao
         Validar();
     }
 
-    public void AtualizarStatusIntegracao(StatusIntegracao novoStatus)
-    {
-        if (StatusIntegracao == StatusIntegracao.AguardandoIntegracao
-            && novoStatus == StatusIntegracao.IntegradaComSucesso
-            || novoStatus == StatusIntegracao.FalhaNaIntegracao)
-        {
-            Notificar(new Notificacao(nameof(StatusIntegracao), 
-                $"Não é permitada a mudança do status {StatusIntegracao} para {novoStatus}"));
-            EhValida = false;
-            return;
-        }
-
-        StatusIntegracao = novoStatus;
-        DataAtualizacao = DateTime.Now;
-        Validar();
-    }
-
     public void AlterarStatusIntegracaoParaEnviada()
     {
         ValidarStatus(PodeAlterarStatusParaEnviado, StatusIntegracao.EnviadaParaIntegracao);
@@ -96,6 +79,32 @@ public partial class Nota : Entidade, IRaizAgregacao
             return;
         }
         StatusIntegracao = StatusIntegracao.EnviadaParaIntegracao;
+        DataAtualizacao = DateTime.Now;
+        Validar();
+    }
+
+    public void AlterarStatusIntegracaoParaFalhaIntegracao()
+    {
+        ValidarStatus(PodeAlterarStatusParaFalhaIntegracao, StatusIntegracao.FalhaNaIntegracao);
+        if (Notificacoes.Any())
+        {
+            EhValida = false;
+            return;
+        }
+        StatusIntegracao = StatusIntegracao.FalhaNaIntegracao;
+        DataAtualizacao = DateTime.Now;
+        Validar();
+    }
+
+    public void AlterarStatusIntegracaoParaIntegradaComSucesso()
+    {
+        ValidarStatus(PodeAlterarStatusParaIntegradaComSucesso, StatusIntegracao.IntegradaComSucesso);
+        if (Notificacoes.Any())
+        {
+            EhValida = false;
+            return;
+        }
+        StatusIntegracao = StatusIntegracao.IntegradaComSucesso;
         DataAtualizacao = DateTime.Now;
         Validar();
     }

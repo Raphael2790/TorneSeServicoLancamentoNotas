@@ -282,4 +282,81 @@ public class NotaTestes
         nota.EhValida.Should().BeFalse();
         nota.Notificacoes.Should().HaveCount(1);
     }
+
+    [Fact(DisplayName = nameof(AlterarStatusIntegracaoParaFalhaIntegracao_QuandoPermitidoTrocaStatus_DeveAtualizarOStatus))]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void AlterarStatusIntegracaoParaFalhaIntegracao_QuandoPermitidoTrocaStatus_DeveAtualizarOStatus()
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidosComStatus(StatusIntegracao.EnviadaParaIntegracao);
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.AlterarStatusIntegracaoParaFalhaIntegracao();
+
+        //Assertt
+        nota.Notificacoes.Should().BeEmpty();
+        nota.EhValida.Should().BeTrue();
+        nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        nota.StatusIntegracao.Should().Be(StatusIntegracao.FalhaNaIntegracao);
+    }
+
+    [Theory(DisplayName = nameof(AlterarStatusIntegracaoParaFalhaIntegracao_QuandoNaoPermitidoTrocaStatus_NaoDeveAtualizarOStatus))]
+    [InlineData(StatusIntegracao.AguardandoIntegracao)]
+    [InlineData(StatusIntegracao.IntegradaComSucesso)]
+    [InlineData(StatusIntegracao.FalhaNaIntegracao)]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void AlterarStatusIntegracaoParaFalhaIntegracao_QuandoNaoPermitidoTrocaStatus_NaoDeveAtualizarOStatus(StatusIntegracao statusIntegracao)
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidosComStatus(statusIntegracao);
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.AlterarStatusIntegracaoParaFalhaIntegracao();
+
+        //Assertt
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.EhValida.Should().BeFalse();
+        nota.Notificacoes.Should().HaveCount(1);
+    }
+
+    [Fact(DisplayName = nameof(AlterarStatusIntegracaoParaIntegradaComSucesso_QuandoPermitidoTrocaStatus_DeveAtualizarOStatus))]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void AlterarStatusIntegracaoParaIntegradaComSucesso_QuandoPermitidoTrocaStatus_DeveAtualizarOStatus()
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidosComStatus(StatusIntegracao.EnviadaParaIntegracao);
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.AlterarStatusIntegracaoParaIntegradaComSucesso();
+
+        //Assertt
+        nota.Notificacoes.Should().BeEmpty();
+        nota.EhValida.Should().BeTrue();
+        nota.DataAtualizacao.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+        nota.StatusIntegracao.Should().Be(StatusIntegracao.IntegradaComSucesso);
+    }
+
+
+    [Theory(DisplayName = nameof(AlterarStatusIntegracaoParaIntegradaComSucesso_QuandoNaoPermitidoTrocaStatus_NaoDeveAtualizarOStatus))]
+    [InlineData(StatusIntegracao.AguardandoIntegracao)]
+    [InlineData(StatusIntegracao.IntegradaComSucesso)]
+    [InlineData(StatusIntegracao.FalhaNaIntegracao)]
+    [Trait("Dominio", "Nota - Agregado")]
+    public void AlterarStatusIntegracaoParaIntegradaComSucesso_QuandoNaoPermitidoTrocaStatus_NaoDeveAtualizarOStatus(StatusIntegracao statusIntegracao)
+    {
+        //Arrange
+        var notaParams = _fixture.RetornaValoresParametrosNotaValidosComStatus(statusIntegracao);
+        Nota nota = new(notaParams);
+
+        //Act
+        nota.AlterarStatusIntegracaoParaIntegradaComSucesso();
+
+        //Assertt
+        nota.Notificacoes.Should().NotBeEmpty();
+        nota.EhValida.Should().BeFalse();
+        nota.Notificacoes.Should().HaveCount(1);
+    }
 }

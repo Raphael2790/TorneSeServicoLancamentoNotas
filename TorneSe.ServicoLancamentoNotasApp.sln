@@ -11,9 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dominio", "Dominio", "{2B87
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testes", "Testes", "{6E708DBF-6909-466D-918D-537293D8CDCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorneSe.ServicoLancamentoNotas.Testes", "testes\TorneSe.ServicoLancamentoNotas.Testes\TorneSe.ServicoLancamentoNotas.Testes.csproj", "{FC1C0D29-2D94-4E0B-974D-DB468269209D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TorneSe.ServicoLancamentoNotas.Testes", "testes\TorneSe.ServicoLancamentoNotas.Testes\TorneSe.ServicoLancamentoNotas.Testes.csproj", "{FC1C0D29-2D94-4E0B-974D-DB468269209D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorneSe.ServicoLancamentoNotas.Dominio", "src\TorneSe.ServicoLancamentoNotas.Dominio\TorneSe.ServicoLancamentoNotas.Dominio.csproj", "{EFD436E0-85E9-4B8E-B0BD-743A23D4B39E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TorneSe.ServicoLancamentoNotas.Dominio", "src\TorneSe.ServicoLancamentoNotas.Dominio\TorneSe.ServicoLancamentoNotas.Dominio.csproj", "{EFD436E0-85E9-4B8E-B0BD-743A23D4B39E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aplicacao", "Aplicacao", "{D789E0EE-8196-4344-9FAF-15D83AF937F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorneSe.ServicoLancamentoNotas.Aplicacao", "src\TorneSe.ServicoLancamentoNotas.Aplicacao\TorneSe.ServicoLancamentoNotas.Aplicacao.csproj", "{3F757AE9-A943-41A1-93C2-D081E5794D1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,10 @@ Global
 		{EFD436E0-85E9-4B8E-B0BD-743A23D4B39E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFD436E0-85E9-4B8E-B0BD-743A23D4B39E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFD436E0-85E9-4B8E-B0BD-743A23D4B39E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F757AE9-A943-41A1-93C2-D081E5794D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F757AE9-A943-41A1-93C2-D081E5794D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F757AE9-A943-41A1-93C2-D081E5794D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F757AE9-A943-41A1-93C2-D081E5794D1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +49,7 @@ Global
 		{8376419D-F03E-47C9-90F8-9FF38EBDDD6B} = {43F2E52B-4135-4F71-BC98-B28EC789C08D}
 		{FC1C0D29-2D94-4E0B-974D-DB468269209D} = {6E708DBF-6909-466D-918D-537293D8CDCA}
 		{EFD436E0-85E9-4B8E-B0BD-743A23D4B39E} = {2B876EF9-4565-48DD-A7D6-1D0CB67CE66C}
+		{3F757AE9-A943-41A1-93C2-D081E5794D1E} = {D789E0EE-8196-4344-9FAF-15D83AF937F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BCEC6D5F-13B2-4853-8A50-8550353575DF}
