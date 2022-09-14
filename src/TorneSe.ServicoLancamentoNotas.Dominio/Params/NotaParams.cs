@@ -13,14 +13,14 @@ public struct NotaParams
 
     public NotaParams(int alunoId, 
         int atividadeId, 
-        double valorNota, DateTime dataLancamento, int usuarioId
+        double valorNota, DateTime dataLancamento
         , StatusIntegracao statusIntegracao =  StatusIntegracao.AguardandoIntegracao)
     {
         AlunoId = alunoId;
         AtividadeId = atividadeId;
         ValorNota = valorNota;
         DataLancamento = dataLancamento;
-        UsuarioId = usuarioId;
+        UsuarioId = 1212;
         StatusIntegracao = statusIntegracao;
     }
 }

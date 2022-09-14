@@ -6,4 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="CasosDeUsos\Nota\Cancelar\" />
+    <Folder Include="CasosDeUsos\Nota\Consultar\" />
+    <Folder Include="CasosDeUsos\Nota\Atualizar\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TorneSe.ServicoLancamentoNotas.Dominio\TorneSe.ServicoLancamentoNotas.Dominio.csproj" />
+  </ItemGroup>
+
 </Project>
