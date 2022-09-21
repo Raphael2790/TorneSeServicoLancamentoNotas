@@ -3,24 +3,28 @@ using TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 using TorneSe.ServicoLancamentoNotas.Dominio.Params;
 using TorneSe.ServicoLancamentoNotas.Testes.Comum;
 
-namespace TorneSe.ServicoLancamentoNotas.Testes.Aplicacao.Mapeadores;
+namespace TorneSe.ServicoLancamentoNotas.Testes.Aplicacao.CasosDeUso.LancarNota;
 
-[CollectionDefinition(nameof(MapeadorAplicacaoFixture))]
-public class MapeadorAplicacaoFixtureCollection 
-    : ICollectionFixture<MapeadorAplicacaoFixture>
+[CollectionDefinition(nameof(LancarNotaTestsFixture))]
+public class LancarNotaTestsFixtureCollection
+    : ICollectionFixture<LancarNotaTestsFixture>
 { }
 
-public class MapeadorAplicacaoFixture
+public class LancarNotaTestsFixture
     : BaseFixture
 {
     public LancarNotaInput DevolveNotaInputValido()
         => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaValorNotaAleatorioValido(),
-            RetornaBoleanoRandomico());
+            false);
+
+    public LancarNotaInput DevolveNotaInputValidoSustitutivo()
+        => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaValorNotaAleatorioValido(),
+            true);
 
     public NotaParams RetornaValoresParametrosNotaValidos()
         => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(),
                 RetornaValorNotaAleatorioValido(), DateTime.Now);
 
-    public Nota RetornaNotaValida()
+    public Nota RetornaNota()
         => new(RetornaValoresParametrosNotaValidos());
 }

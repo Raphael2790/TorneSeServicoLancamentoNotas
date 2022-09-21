@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="CasosDeUsos\Nota\Cancelar\" />
     <Folder Include="CasosDeUsos\Nota\Consultar\" />
-    <Folder Include="CasosDeUsos\Nota\Atualizar\" />
   </ItemGroup>
 
   <ItemGroup>

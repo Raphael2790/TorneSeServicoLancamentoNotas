@@ -20,11 +20,18 @@ public sealed class LancarNota : ILancarNota
 
     public async Task<NotaOutputModel> Handle(LancarNotaInput request, CancellationToken cancellationToken)
     {
-        var nota = MapeadorAplicacao.LancarNotaInputEmNota(request);
+        if (request.NotaSubstitutiva)
+        {
+            var nota = await _notaRepository.BuscarNotaPorAlunoEAtividade(request.AlunoId, request.AtividadeId, cancellationToken);
+            nota.CancelarPorRetentativa();
+            await _notaRepository.Atualizar(nota, cancellationToken);
+        }
 
-        await _notaRepository.Inserir(nota, cancellationToken);
+        var novaNota = MapeadorAplicacao.LancarNotaInputEmNota(request);
+
+        await _notaRepository.Inserir(novaNota, cancellationToken);
         await _unitOfWork.Commit(cancellationToken);
 
-        return MapeadorAplicacao.NotaEmNotaOuputModel(nota);
+        return MapeadorAplicacao.NotaEmNotaOuputModel(novaNota);
     }
 }
