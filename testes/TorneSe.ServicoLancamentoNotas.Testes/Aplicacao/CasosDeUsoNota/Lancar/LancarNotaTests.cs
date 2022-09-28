@@ -6,7 +6,6 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.Interface
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
-using TorneSe.ServicoLancamentoNotas.Testes.Aplicacao.CasosDeUso.LancarNota;
 
 namespace TorneSe.ServicoLancamentoNotas.Testes.Aplicacao.CasosDeUsoNota.Lancar;
 
