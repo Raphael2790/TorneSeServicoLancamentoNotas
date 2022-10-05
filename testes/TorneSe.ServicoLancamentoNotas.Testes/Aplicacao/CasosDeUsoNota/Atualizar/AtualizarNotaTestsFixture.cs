@@ -19,6 +19,12 @@ public class AtualizarNotaTestsFixture
 				RetornaNumeroIdRandomico(),
 				RetornaValorNotaAleatorioValido());
 
+	public AtualizarNotaInput RetornaInputInvalido()
+		=> new(RetornaNumeroIdRandomico(),
+				RetornaNumeroIdRandomico(),
+				RetornaNumeroIdRandomico(),
+				-1);
+
 	public NotaParams RetornaValoresParametrosNotaValidos()
 		=> new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(),
 				RetornaValorNotaAleatorioValido(), DateTime.Now);
