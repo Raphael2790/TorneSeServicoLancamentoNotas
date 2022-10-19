@@ -132,7 +132,7 @@ public class NotaTestes
         var notaParams = _fixture.RetornaValoresParametrosNotaValidos();
         Nota nota = new(notaParams);
         string motivoCancelamento = _fixture.Faker.Lorem.Text();
-        while(motivoCancelamento.Length < 500)
+        while(motivoCancelamento.Length <= 500)
             motivoCancelamento += _fixture.Faker.Lorem.Text();
 
         //Act

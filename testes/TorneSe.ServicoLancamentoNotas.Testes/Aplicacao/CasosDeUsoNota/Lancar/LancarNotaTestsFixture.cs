@@ -21,6 +21,10 @@ public class LancarNotaTestsFixture
         => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaValorNotaAleatorioValido(),
             true);
 
+    public LancarNotaInput DevolveNotaInputInvalido()
+       => new(-1, -1, -1, 11,
+           false);
+
     public NotaParams RetornaValoresParametrosNotaValidos()
         => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(),
                 RetornaValorNotaAleatorioValido(), DateTime.Now);

@@ -22,4 +22,13 @@ public class CancelarNotaTestsFixture
 
 	public CancelarNotaInput RetornaInput()
 		=> new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), Faker.Commerce.ProductName());
+
+    public CancelarNotaInput RetornaInputInvalido()
+    {
+        string motivoCancelamento = Faker.Lorem.Text();
+        while (motivoCancelamento.Length <= 500)
+            motivoCancelamento += Faker.Lorem.Text();
+
+        return new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), motivoCancelamento);
+    }
 }
