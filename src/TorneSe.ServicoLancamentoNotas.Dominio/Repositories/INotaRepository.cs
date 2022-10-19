@@ -6,5 +6,5 @@ namespace TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 
 public interface INotaRepository : IGenericRepository<Nota>, IBuscaRepository<Nota>
 {
-    Task<Nota> BuscarNotaPorAlunoEAtividade(int alunoId, int atividadeId, CancellationToken cancellationToken);
+    Task<Nota?> BuscarNotaPorAlunoEAtividade(int alunoId, int atividadeId, CancellationToken cancellationToken);
 }
