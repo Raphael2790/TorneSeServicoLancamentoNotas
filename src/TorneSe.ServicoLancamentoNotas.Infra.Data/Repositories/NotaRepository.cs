@@ -7,7 +7,7 @@ using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 
 namespace TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 
-internal class NotaRepository : INotaRepository
+public class NotaRepository : INotaRepository
 {
     private readonly DbSet<Nota> _contextoNota;
 

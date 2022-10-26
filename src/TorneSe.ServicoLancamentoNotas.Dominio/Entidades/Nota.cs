@@ -22,6 +22,8 @@ public partial class Nota : Entidade, IRaizAgregacao
     public StatusIntegracao StatusIntegracao { get; private set; }
 
     public Nota(NotaParams notaParams)
+        : this(notaParams.AlunoId, notaParams.AtividadeId, notaParams.ValorNota, notaParams.DataLancamento,
+              notaParams.UsuarioId, notaParams.StatusIntegracao)
     {
         AlunoId = notaParams.AlunoId;
         AtividadeId = notaParams.AtividadeId;
@@ -35,6 +37,18 @@ public partial class Nota : Entidade, IRaizAgregacao
 
         Validar(this, NotaValidador.Instance);
     }
+
+    private Nota(int alunoId, int atividadeId, double valorNota, DateTime dataLancamento, int usuarioId, StatusIntegracao statusIntegracao)
+    {
+        AlunoId = alunoId;
+        AtividadeId = atividadeId;
+        ValorNota = valorNota;
+        DataLancamento = dataLancamento;
+        UsuarioId = usuarioId;
+        StatusIntegracao = statusIntegracao;
+    }
+
+    protected Nota(){}
 
     private void Validar()
         => ValidacoesDominio
