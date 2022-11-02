@@ -19,22 +19,10 @@ public class BaseFixture
     public bool RetornaBoleanoRandomico()
         => new Random().Next(0, 10) > 5;
 
-    public NotaParams RetornaValoresParametrosNotaValidos()
-        => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(),
+    public NotaParams RetornaValoresParametrosNotaValidos(int? idAluno = null)
+        => new(idAluno ?? RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(),
                 RetornaValorNotaAleatorioValido(), DateTime.Now);
 
-    public Nota RetornaNota()
-        => new(RetornaValoresParametrosNotaValidos());
-
-    public ServicoLancamentoNotaDbContext CriarDbContext()
-    {
-        var dbContext = new ServicoLancamentoNotaDbContext
-            (
-                new DbContextOptionsBuilder<ServicoLancamentoNotaDbContext>()
-                    .UseInMemoryDatabase("integration-tests")
-                    .Options
-            );
-
-        return dbContext;
-    }
+    public Nota RetornaNota(int? idAluno = null)
+        => new(RetornaValoresParametrosNotaValidos(idAluno));
 }

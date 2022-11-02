@@ -26,11 +26,16 @@
 
   <ItemGroup>
     <Folder Include="Aplicacao\" />
-    <Folder Include="Infra.Data\UoW\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TorneSe.ServicoLancamentoNotas.Infra.Data\TorneSe.ServicoLancamentoNotas.Infra.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
