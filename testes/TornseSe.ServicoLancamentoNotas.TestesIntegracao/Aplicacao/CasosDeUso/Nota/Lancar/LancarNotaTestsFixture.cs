@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TornseSe.ServicoLancamentoNotas.TestesIntegracao.Base;
 
@@ -23,4 +24,16 @@ public class LancarNotaTestsFixture
 
         return dbContext;
     }
+
+    public LancarNotaInput DevolveNotaInputValido()
+        => new(RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaNumeroIdRandomico(), RetornaValorNotaAleatorioValido(),
+            false);
+
+    public LancarNotaInput DevolveNotaInputInvalido()
+       => new(-1, -1, -1, 11,
+           false);
+
+    public LancarNotaInput DevolveNotaSubstitutivaInputValido(int alunoId, int atividadeId)
+        => new(alunoId, atividadeId, RetornaNumeroIdRandomico(), RetornaValorNotaAleatorioValido(),
+            true);
 }

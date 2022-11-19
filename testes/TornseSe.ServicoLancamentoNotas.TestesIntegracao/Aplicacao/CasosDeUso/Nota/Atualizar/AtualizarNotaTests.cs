@@ -36,7 +36,7 @@ public class AtualizarNotaTests
     }
 
     [Fact(DisplayName = nameof(Atualizar_QuandoNotaExiste_DeveAtualizarValores))]
-    [Trait("Aplicacao", "Integracao/Aplicacao - Casos de Uso")]
+    [Trait("Aplicacao", "Integracao/AtualizarNota - Casos de Uso")]
     public async Task Atualizar_QuandoNotaExiste_DeveAtualizarValores()
     {   
         //Arrange
@@ -62,7 +62,7 @@ public class AtualizarNotaTests
     }
 
     [Fact(DisplayName = nameof(Atualizar_QuandoNotaNaoExiste_DeveInformarErroNotaNaoEncontrada))]
-    [Trait("Aplicacao", "Integracao/Aplicacao - Casos de Uso")]
+    [Trait("Aplicacao", "Integracao/AtualizarNota - Casos de Uso")]
     public async Task Atualizar_QuandoNotaNaoExiste_DeveInformarErroNotaNaoEncontrada()
     {
         //Arrange
@@ -81,7 +81,7 @@ public class AtualizarNotaTests
     [Theory(DisplayName = nameof(Atualizar_QuandoNotaInformadoInputInvalido_DeveInformarErroNotaInvalida))]
     [InlineData(-1)]
     [InlineData(11)]
-    [Trait("Aplicacao", "Integracao/Aplicacao - Casos de Uso")]
+    [Trait("Aplicacao", "Integracao/AtualizarNota - Casos de Uso")]
     public async Task Atualizar_QuandoNotaInformadoInputInvalido_DeveInformarErroNotaInvalida(int novoValorNota)
     {
         //Arrange
