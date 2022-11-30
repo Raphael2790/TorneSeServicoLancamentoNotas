@@ -19,6 +19,14 @@ public class Tenant
         Origem = origem ?? string.Empty;
     }
 
+    public override string ToString()
+    {
+        return Origem ?? string.Empty;
+    }
+
+    public static implicit operator Tenant(string origem)
+        => new(origem);
+
     public static implicit operator string(Tenant origem)
     {
         return origem?.Origem ?? "";

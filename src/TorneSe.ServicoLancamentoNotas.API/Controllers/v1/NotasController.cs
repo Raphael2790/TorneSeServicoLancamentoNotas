@@ -73,7 +73,7 @@ public class NotasController : ControllerBase
         return BadRequest(response);
     }
 
-    [HttpGet("buscar")]
+    [HttpGet("buscar/{origem}")]
     [ProducesResponseType(typeof(Resultado<ListaNotaOutput>), StatusCodes.Status200OK)]
     public async Task<IActionResult> Buscar([FromQuery] ListaNotaInput input, CancellationToken cancellationToken)
     {

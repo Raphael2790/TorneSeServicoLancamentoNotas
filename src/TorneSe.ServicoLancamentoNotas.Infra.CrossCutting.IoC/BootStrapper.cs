@@ -10,6 +10,7 @@ using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Visitors;
 
 namespace TorneSe.ServicoLancamentoNotas.Infra.CrossCutting.IoC;
 
@@ -30,9 +31,12 @@ public static class BootStrapper
         => services.AddScoped<INotaRepository, NotaRepository>();
 
     private static IServiceCollection RegistrarDbContext(this IServiceCollection services)
-        => services.AddDbContext<ServicoLancamentoNotaDbContext>(options => 
+        => services
+        .AddTransient<IVisitor<DbContextOptionsBuilder>, DbContextOptionsBuilderVisitor>()
+        .AddDbContext<ServicoLancamentoNotaDbContext>((provider,options) => 
         {
-            options.UseInMemoryDatabase("db-teste-in-memory");
+            provider.GetRequiredService<IVisitor<DbContextOptionsBuilder>>().Visit(options);
+            //options.UseInMemoryDatabase("db-teste-in-memory");
         });
 
     private static IServiceCollection RegistrarHandlers(this IServiceCollection services)
