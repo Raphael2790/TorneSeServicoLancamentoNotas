@@ -6,6 +6,8 @@ namespace TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 
 public class VariaveisAmbienteProvider : IVariaveisAmbienteProvider
 {
+    public static readonly VariaveisAmbienteProvider Instance = new VariaveisAmbienteProvider();
+
     public HashSet<string> Tenants => _tenants;
 
     private readonly HashSet<string> _tenants;

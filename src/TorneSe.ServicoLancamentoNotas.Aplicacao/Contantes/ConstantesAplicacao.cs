@@ -12,7 +12,7 @@ public static class ConstantesAplicacao
     public static class TenantsAplicacao
     {
         public const string TORNE_SE_CSHARP = "torne-se-csharp";
-        public const string TORNE_SE_JAVA = "torne-se-csharp";
+        public const string TORNE_SE_JAVA = "torne-se-java";
         public const string TORNE_SE_JAVASCRIPT = "torne-se-javascript";
     }
 }

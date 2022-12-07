@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar.DTOs;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Cancelar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 
 namespace TorneSe.ServicoLancamentoNotas.API.Controllers.v1;
@@ -54,21 +56,27 @@ public class NotasController : ControllerBase
         if (response.Sucesso)
             return Ok(response);
 
+        if(response.Erro == TipoErro.NotaNaoEncontrada)
+            return NotFound(response);
+
         return BadRequest(response);
     }
 
     [HttpPatch("cancelar")]
     [ProducesResponseType(typeof(Resultado<NotaOutputModel>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Resultado<NotaOutputModel>), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Cancelar([FromBody] AtualizarNotaInput input, CancellationToken cancellationToken)
+    public async Task<IActionResult> Cancelar([FromBody] CancelarNotaInput input, CancellationToken cancellationToken)
     {
-        var response = await _handler.EnviarRequest<Resultado<NotaOutputModel>, AtualizarNotaInput>(input, cancellationToken);
+        var response = await _handler.EnviarRequest<Resultado<NotaOutputModel>, CancelarNotaInput>(input, cancellationToken);
 
         _logger.LogInformation("Efetuado cancelamento de nota do aluno {alunoId} para a atividade {atividadeId}. {@response}",
            input.AlunoId, input.AtividadeId, response);
 
         if (response.Sucesso)
             return Ok(response);
+
+        if (response.Erro == TipoErro.NotaNaoEncontrada)
+            return NotFound(response);
 
         return BadRequest(response);
     }

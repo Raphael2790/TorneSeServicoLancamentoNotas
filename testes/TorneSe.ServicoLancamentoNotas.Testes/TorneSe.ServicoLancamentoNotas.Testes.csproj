@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\TorneSe.ServicoLancamentoNotas.API\TorneSe.ServicoLancamentoNotas.API.csproj" />
     <ProjectReference Include="..\..\src\TorneSe.ServicoLancamentoNotas.Aplicacao\TorneSe.ServicoLancamentoNotas.Aplicacao.csproj" />
     <ProjectReference Include="..\..\src\TorneSe.ServicoLancamentoNotas.Dominio\TorneSe.ServicoLancamentoNotas.Dominio.csproj" />
   </ItemGroup>
