@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
+using TorneSe.ServicoLancamentoNotas.API.Controllers.Base;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Cancelar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
-using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 
 namespace TorneSe.ServicoLancamentoNotas.API.Controllers.v1;
 
-[ApiController]
 [ApiVersion("1")]
 [Produces(MediaTypeNames.Application.Json)]
 [Consumes(MediaTypeNames.Application.Json)]
 [Route("notas/v1")]
-public class NotasController : ControllerBase
+public class NotasController : MainController
 {
     private readonly ILogger<NotasController> _logger;
     private readonly IMediatorHandler _handler;
@@ -37,10 +36,7 @@ public class NotasController : ControllerBase
         _logger.LogInformation("Efetuado lançamento de nota do aluno {alunoId} para a atividade {atividadeId}. {@response}",
             input.AlunoId, input.AtividadeId, response);
 
-        if (response.Sucesso)
-            return Ok(response);
-
-        return BadRequest(response);
+       return RespostaCustomizada(response);
     }
 
     [HttpPatch("atualizar")]
@@ -53,13 +49,7 @@ public class NotasController : ControllerBase
         _logger.LogInformation("Efetuado atualização de nota do aluno {alunoId} para a atividade {atividadeId}. {@response}",
             input.AlunoId, input.AtividadeId, response);
 
-        if (response.Sucesso)
-            return Ok(response);
-
-        if(response.Erro == TipoErro.NotaNaoEncontrada)
-            return NotFound(response);
-
-        return BadRequest(response);
+        return RespostaCustomizada(response);
     }
 
     [HttpPatch("cancelar")]
@@ -72,13 +62,7 @@ public class NotasController : ControllerBase
         _logger.LogInformation("Efetuado cancelamento de nota do aluno {alunoId} para a atividade {atividadeId}. {@response}",
            input.AlunoId, input.AtividadeId, response);
 
-        if (response.Sucesso)
-            return Ok(response);
-
-        if (response.Erro == TipoErro.NotaNaoEncontrada)
-            return NotFound(response);
-
-        return BadRequest(response);
+        return RespostaCustomizada(response);
     }
 
     [HttpGet("buscar/{origem}")]
@@ -87,7 +71,7 @@ public class NotasController : ControllerBase
     {
         var response = await _handler.EnviarRequest<Resultado<ListaNotaOutput>, ListaNotaInput>(input, cancellationToken);
 
-        return Ok(response);
+        return RespostaCustomizada(response);
     }
 
 }

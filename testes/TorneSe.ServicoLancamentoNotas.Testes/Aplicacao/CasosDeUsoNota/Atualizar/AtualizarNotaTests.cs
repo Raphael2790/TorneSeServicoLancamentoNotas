@@ -69,7 +69,7 @@ public class AtualizarNotaTests
         output.Should().NotBeNull();
         output.Should().BeOfType<Resultado<NotaOutputModel>>();
         output.Sucesso.Should().BeFalse();
-        output.Erro.Should().Be(TipoErro.NotaNaoEncontrada);
+        output.Erro.Should().Be(TipoErro.RecursoNaoEncontrado);
         output.DescricaoErro.Should().NotBeEmpty();
         output.Dado.Should().BeNull();
         _repositoryMock.Verify(x => x.BuscarNotaPorAlunoEAtividade(input.AlunoId, input.AtividadeId, It.IsAny<CancellationToken>()), Times.Once);

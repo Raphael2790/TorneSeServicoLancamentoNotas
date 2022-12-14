@@ -32,7 +32,7 @@ public class CancelarNota : ICancelarNota
             var nota = await _notaRepository.BuscarNotaPorAlunoEAtividade(request.AlunoId, request.AtividadeId, cancellationToken);
 
             if (nota is null)
-                return Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.NotaNaoEncontrada);
+                return Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.RecursoNaoEncontrado);
 
             nota.Cancelar(request.Motivo);
 

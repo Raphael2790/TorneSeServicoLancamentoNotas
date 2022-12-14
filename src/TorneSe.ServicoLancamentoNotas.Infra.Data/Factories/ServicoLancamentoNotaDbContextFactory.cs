@@ -13,14 +13,15 @@ public class ServicoLancamentoNotaDbContextFactory : IDesignTimeDbContextFactory
     public ServicoLancamentoNotaDbContext CreateDbContext(string[] args)
     {
         Environment.SetEnvironmentVariable("TENANTS", "torne-se-csharp;torne-se-javascript;torne-se-java");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESECSHARP", "connection_mysql");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVA", "connection_mysql");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVASCRIPT", "connection_mysql");
+        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESECSHARP", "Server=localhost;Database=TorneSeCsharp;Port=3306;Uid=root;Pwd=root;Pooling=True;");
+        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVA", "Server=localhost;Database=TorneSeJava;Port=3306;Uid=root;Pwd=root;Pooling=True;");
+        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVASCRIPT", "Server=localhost;Database=TorneSeJavascript;Port=3306;Uid=root;Pwd=root;Pooling=True;");
 
         //-args torne-se-java
-        Tenant tenant = args.Last();
+        Tenant tenant = args[^1];
         var variaveisAmbienteProvider = VariaveisAmbienteProvider.Instance;
         var tenantProvider = new TenantProvider(null!, variaveisAmbienteProvider);
+
         if (!tenantProvider.ValidarTenant(tenant))
             throw new TenantInvalidoException(tenant);
 

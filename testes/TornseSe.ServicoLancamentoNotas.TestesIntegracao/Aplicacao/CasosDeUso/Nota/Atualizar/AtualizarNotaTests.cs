@@ -75,7 +75,7 @@ public class AtualizarNotaTests
         resposta.Should().NotBeNull();
         resposta.Sucesso.Should().BeFalse();
         resposta.Dado.Should().BeNull();
-        resposta.Erro.Should().Be(TipoErro.NotaNaoEncontrada);
+        resposta.Erro.Should().Be(TipoErro.RecursoNaoEncontrado);
     }
 
     [Theory(DisplayName = nameof(Atualizar_QuandoNotaInformadoInputInvalido_DeveInformarErroNotaInvalida))]

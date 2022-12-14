@@ -135,7 +135,7 @@ public class NotaControllerTests
         var resposta = resultado!.Value as Resultado<NotaOutputModel>;
         resposta.Should().NotBeNull();
         resposta!.Dado.Should().BeNull();
-        resposta.Erro.Should().Be(TipoErro.NotaNaoEncontrada);
+        resposta.Erro.Should().Be(TipoErro.RecursoNaoEncontrado);
         resposta.Sucesso.Should().BeFalse();
     }
 
@@ -200,7 +200,7 @@ public class NotaControllerTests
         var resposta = resultado!.Value as Resultado<NotaOutputModel>;
         resposta.Should().NotBeNull();
         resposta!.Dado.Should().BeNull();
-        resposta.Erro.Should().Be(TipoErro.NotaNaoEncontrada);
+        resposta.Erro.Should().Be(TipoErro.RecursoNaoEncontrado);
         resposta.Sucesso.Should().BeFalse();
     }
 

@@ -25,7 +25,7 @@ public class NotaControllerTestsFixture
         => Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.NotaInvalida);
 
     public Resultado<NotaOutputModel> RetornaResultadoNotaNaoEncontrada()
-        => Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.NotaNaoEncontrada);
+        => Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.RecursoNaoEncontrado);
 
     private ListaNotaOutput RetornaListaOutput(int quantidade)
         => new(1, 10, 0, Enumerable.Range(0, quantidade).Select(_ => RetornaOutputModel()).ToList());

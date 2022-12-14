@@ -62,7 +62,7 @@ public class CancelarNotaTests
         output.Should().NotBeNull();
         output.Should().BeOfType<Resultado<NotaOutputModel>>();
         output.Sucesso.Should().BeFalse();
-        output.Erro.Should().Be(TipoErro.NotaNaoEncontrada);
+        output.Erro.Should().Be(TipoErro.RecursoNaoEncontrado);
         _repositoryMock.Verify(x => x.BuscarNotaPorAlunoEAtividade(input.AlunoId, input.AtividadeId, It.IsAny<CancellationToken>()), Times.Once);
         _repositoryMock.Verify(x => x.Atualizar(It.IsAny<Nota>(), It.IsAny<CancellationToken>()), Times.Never);
         _unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Never);

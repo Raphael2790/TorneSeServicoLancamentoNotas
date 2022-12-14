@@ -1,4 +1,6 @@
 ﻿using TorneSe.ServicoLancamentoNotas.API.Configurations.Swagger;
+using TorneSe.ServicoLancamentoNotas.API.Extensions;
+using TorneSe.ServicoLancamentoNotas.API.Filters;
 using TorneSe.ServicoLancamentoNotas.API.Middlewares;
 using TorneSe.ServicoLancamentoNotas.Infra.CrossCutting.IoC;
 
@@ -8,7 +10,11 @@ public static class ConfigurarInjecaoDependenciaExtension
 {
     public static IServiceCollection ConfigurarServicos(this IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(typeof(ApiGlobalExceptionFilter));
+        })
+        .AdicionarSerializerContext();
         services.RegistrarServicos();
         services.AddEndpointsApiExplorer();
         services.AddHttpContextAccessor();

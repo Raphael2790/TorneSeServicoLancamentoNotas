@@ -26,11 +26,11 @@ public class ResultadoTests
     [Trait("Aplicacao", "Resultado - Comum")]
     public void RetornaResultadoErro_DeveSetarErro()
     {
-        var resultado = Resultado<ResultadoDTO>.RetornaResultadoErro(TipoErro.NotaNaoEncontrada);
+        var resultado = Resultado<ResultadoDTO>.RetornaResultadoErro(TipoErro.RecursoNaoEncontrado);
 
         resultado.Sucesso.Should().BeFalse();
         resultado.Dado.Should().BeNull();
-        resultado.Erro.Should().Be(TipoErro.NotaNaoEncontrada);
+        resultado.Erro.Should().Be(TipoErro.RecursoNaoEncontrado);
         resultado.DescricaoErro.Should().NotBeNull();
         resultado.DetalhesErros.Should().BeNull();
     }
