@@ -1,9 +1,12 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.Behaviors;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mediator;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.Validacoes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
@@ -24,7 +27,9 @@ public static class BootStrapper
             .RegistrarUnitOfWork()
             .RegistrarHandlers()
             .RegistrarMediator()
-            .RegistrarProviders();
+            .RegistrarProviders()
+            .RegistrarValidacoes()
+            .RegistrarComportamentos();
     }
 
     private static IServiceCollection RegistrarRepositorios(this IServiceCollection services)
@@ -41,6 +46,14 @@ public static class BootStrapper
 
     private static IServiceCollection RegistrarHandlers(this IServiceCollection services)
         => services.AddMediatR(typeof(ConsultaNota));
+
+    private static IServiceCollection RegistrarValidacoes(this IServiceCollection services)
+        => services.AddValidatorsFromAssembly(typeof(LancarNotaInputValidator).Assembly);
+
+    private static IServiceCollection RegistrarComportamentos(this IServiceCollection services)
+        => services
+            //.AddScoped<IPipelineBehavior<LancarNotaInput, Resultado<NotaOutputModel>>, LancarNotaInputValidacaoBehavior>()
+            .AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidacaoInputBehavior<,>));
 
     private static IServiceCollection RegistrarUnitOfWork(this IServiceCollection services)
         => services.AddScoped<IUnitOfWork, UnitOfWork>();
