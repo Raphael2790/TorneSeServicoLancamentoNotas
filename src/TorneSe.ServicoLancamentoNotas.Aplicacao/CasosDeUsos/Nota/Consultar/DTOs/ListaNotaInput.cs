@@ -7,7 +7,7 @@ namespace TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar.DT
 public record class ListaNotaInput
     : ListaPaginadaInput, IRequest<Resultado<ListaNotaOutput>>
 {
-    public ListaNotaInput(int Pagina, int PorPagina, int? AlunoId, int? AtividadeId, string OrdenarPor, OrdenacaoBusca Ordenacao = OrdenacaoBusca.Asc) 
+    public ListaNotaInput(int Pagina = 1, int PorPagina = 10, int? AlunoId = null, int? AtividadeId = null, string OrdenarPor = "", OrdenacaoBusca Ordenacao = OrdenacaoBusca.Asc) 
         : base(Pagina, PorPagina, AlunoId, AtividadeId, OrdenarPor, Ordenacao)
     {
     }

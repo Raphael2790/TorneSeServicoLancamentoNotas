@@ -23,5 +23,6 @@ public static class ConstantesAplicacao
         public const string PROFESSOR_ID_INVALIDO = "O campo com o id professor informado está inválido!";
         public const string ATIVIDADE_ID_INVALIDO = "O campo com o id da atividade informada está inválida";
         public const string NOTA_INVALIDA = "O campo com valor da nota informada está inválida";
+        public const string MOTIVO_CANCELAMENTO = "O motivo do cancelamento da nota deve ser informado";
     }
 }

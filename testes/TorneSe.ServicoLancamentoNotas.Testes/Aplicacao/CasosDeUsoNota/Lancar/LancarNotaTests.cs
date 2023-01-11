@@ -7,6 +7,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.Interface
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
+using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Entidades;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 
@@ -19,6 +20,7 @@ public class LancarNotaTests
     private readonly Mock<INotaRepository> _notaRepository;
     private readonly Mock<IUnitOfWork> _unitOfWork;
     private readonly Mock<ILogger<LancarNota>> _logger;
+    private readonly Mock<ICursoClient> _cursoClient;
     private readonly ILancarNota _sut;
 
     public LancarNotaTests(LancarNotaTestsFixture fixture)
@@ -27,7 +29,8 @@ public class LancarNotaTests
         _notaRepository = new Mock<INotaRepository>();
         _unitOfWork = new Mock<IUnitOfWork>();
         _logger = new Mock<ILogger<LancarNota>>();
-        _sut = new LancarNota(_notaRepository.Object, _unitOfWork.Object, _logger.Object);
+        _cursoClient = new Mock<ICursoClient>();
+        _sut = new LancarNota(_notaRepository.Object, _unitOfWork.Object, _logger.Object, _cursoClient.Object);
     }
 
     [Fact(DisplayName = nameof(Handle_QuandoNotaValida_DeveSerSalvar))]

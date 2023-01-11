@@ -7,9 +7,11 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.Interface
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
+using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Constantes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Enums;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
@@ -24,6 +26,7 @@ public class LancarNotaTests
     private readonly INotaRepository _notaRepository;
     private readonly ILogger<LancarNota> _logger;
     private readonly ServicoLancamentoNotaDbContext _context;
+    private readonly ICursoClient _cursoClient;
     private readonly ILancarNota _sut;
 
     public LancarNotaTests(LancarNotaTestsFixture fixture)
@@ -34,7 +37,8 @@ public class LancarNotaTests
         _notaRepository = new NotaRepository(_context);
         var loggerFactory = new LoggerFactory();
         _logger = loggerFactory.CreateLogger<LancarNota>();
-        _sut = new LancarNota(_notaRepository, _unitOfWork, _logger);
+        _cursoClient = new CursoClient(new HttpClient(), loggerFactory.CreateLogger<CursoClient>());
+        _sut = new LancarNota(_notaRepository, _unitOfWork, _logger, _cursoClient);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
     }

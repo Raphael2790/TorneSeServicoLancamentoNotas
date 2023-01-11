@@ -17,4 +17,8 @@
     <ProjectReference Include="..\TorneSe.ServicoLancamentoNotas.Dominio\TorneSe.ServicoLancamentoNotas.Dominio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Clients\Curso\Response\" />
+  </ItemGroup>
+
 </Project>

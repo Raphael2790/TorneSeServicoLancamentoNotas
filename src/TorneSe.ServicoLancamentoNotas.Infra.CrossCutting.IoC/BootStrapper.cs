@@ -7,7 +7,9 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mediator;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Validacoes;
+using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
@@ -29,7 +31,8 @@ public static class BootStrapper
             .RegistrarMediator()
             .RegistrarProviders()
             .RegistrarValidacoes()
-            .RegistrarComportamentos();
+            .RegistrarComportamentos()
+            .RegistrarClients();
     }
 
     private static IServiceCollection RegistrarRepositorios(this IServiceCollection services)
@@ -63,5 +66,12 @@ public static class BootStrapper
 
     private static IServiceCollection RegistrarProviders(this IServiceCollection services)
         => services.AddScoped<ITenantProvider, TenantProvider>()
-                   .AddScoped<IVariaveisAmbienteProvider, VariaveisAmbienteProvider>(); 
+                   .AddScoped<IVariaveisAmbienteProvider, VariaveisAmbienteProvider>();
+
+    private static IServiceCollection RegistrarClients(this IServiceCollection services)
+    {
+        services.AddHttpClient<ICursoClient, CursoClient>("curso");
+
+        return services;
+    }
 }

@@ -5,7 +5,9 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
+using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
@@ -20,6 +22,7 @@ public class AtualizarNotaTests
     private readonly INotaRepository _notaRepository;
     private readonly ILogger<AtualizarNota> _logger;
     private readonly ServicoLancamentoNotaDbContext _context;
+    private readonly ICursoClient _cursoClient;
     private readonly IAtualizarNota _sut;
 
     public AtualizarNotaTests(AtualizarNotaTestsFixture fixture)
@@ -30,7 +33,8 @@ public class AtualizarNotaTests
         _notaRepository = new NotaRepository(_context);
         var loggerFactory = new LoggerFactory();
         _logger = loggerFactory.CreateLogger<AtualizarNota>();
-        _sut = new AtualizarNota(_notaRepository, _unitOfWork, _logger);
+        _cursoClient = new CursoClient(new HttpClient(), loggerFactory.CreateLogger<CursoClient>());
+        _sut = new AtualizarNota(_notaRepository, _unitOfWork, _logger, _cursoClient);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
     }

@@ -6,6 +6,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mapeadores;
+using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 
 namespace TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Cancelar;
@@ -15,14 +16,17 @@ public class CancelarNota : ICancelarNota
     private readonly INotaRepository _notaRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<CancelarNota> _logger;
+    private readonly ICursoClient _cursoClient;
 
-    public CancelarNota(INotaRepository notaRepository, 
-                        IUnitOfWork unitOfWork, 
-                        ILogger<CancelarNota> logger)
+    public CancelarNota(INotaRepository notaRepository,
+                        IUnitOfWork unitOfWork,
+                        ILogger<CancelarNota> logger,
+                        ICursoClient cursoClient)
     {
         _notaRepository = notaRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _cursoClient = cursoClient;
     }
 
     public async Task<Resultado<NotaOutputModel>> Handle(CancelarNotaInput request, CancellationToken cancellationToken)

@@ -6,6 +6,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mapeadores;
+using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 
 namespace TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar;
@@ -15,14 +16,17 @@ public sealed class LancarNota : ILancarNota
     private readonly INotaRepository _notaRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<LancarNota> _logger;
+    private readonly ICursoClient _cursoClient;
 
-    public LancarNota(INotaRepository notaRepository, 
+    public LancarNota(INotaRepository notaRepository,
                       IUnitOfWork unitOfWork,
-                      ILogger<LancarNota> logger)
+                      ILogger<LancarNota> logger,
+                      ICursoClient cursoClient)
     {
         _notaRepository = notaRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _cursoClient = cursoClient;
     }
 
     public async Task<Resultado<NotaOutputModel>> Handle(LancarNotaInput request, CancellationToken cancellationToken)

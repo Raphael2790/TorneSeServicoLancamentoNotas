@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
-using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar.DTOs;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Cancelar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Contantes;
 
 namespace TorneSe.ServicoLancamentoNotas.Aplicacao.Validacoes;
 
-public class AtualizarNotaInputValidator
-    : AbstractValidator<AtualizarNotaInput>
+public class CancelarNotaInputValidator : AbstractValidator<CancelarNotaInput>
 {
-    public readonly static AtualizarNotaInputValidator Instance = new();
+    public readonly static CancelarNotaInputValidator Instance = new();
 
-    public AtualizarNotaInputValidator()
+    public CancelarNotaInputValidator()
 	{
         RuleFor(x => x.AlunoId)
             .GreaterThan(default(int))
@@ -23,8 +22,10 @@ public class AtualizarNotaInputValidator
             .GreaterThan(default(int))
             .WithMessage(ConstantesAplicacao.MensagensValidacao.ATIVIDADE_ID_INVALIDO);
 
-        RuleFor(x => x.ValorNota)
-            .GreaterThan(default(int))
-            .WithMessage(ConstantesAplicacao.MensagensValidacao.NOTA_INVALIDA);
+        RuleFor(x => x.Motivo)
+            .NotEmpty()
+            .WithMessage(ConstantesAplicacao.MensagensValidacao.MOTIVO_CANCELAMENTO)
+            .NotNull()
+            .WithMessage(ConstantesAplicacao.MensagensValidacao.MOTIVO_CANCELAMENTO);
     }
 }
