@@ -4,6 +4,6 @@ namespace TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 
 public interface ICursoClient
 {
-    Task<Curso> ObterInformacoesCursoAluno(int alunoId, int professorId,
+    Task<IEnumerable<Curso>>? ObterInformacoesCursoAluno(int alunoId, int professorId,
         int atividadeId, CancellationToken cancellationToken);
 }

@@ -12,6 +12,9 @@ public enum TipoErro
     [Description(ConstantesAplicacao.MensagensErro.INPUT_NOTA_INVALIDO)]
     InputNotaInvalido = 201,
 
+    [Description(ConstantesAplicacao.MensagensErro.NAO_FOI_POSSIVEL_VALIDAR_VINCULOS_CURSO)]
+    NaoFoiPossivelValidarVinculosCurso = 301,
+
     [Description(ConstantesAplicacao.MensagensErro.RECURSO_NAO_ENCONTRADO)]
     RecursoNaoEncontrado = 400,
 

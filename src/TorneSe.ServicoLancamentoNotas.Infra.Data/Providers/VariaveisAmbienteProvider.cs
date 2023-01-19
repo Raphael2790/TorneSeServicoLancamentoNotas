@@ -10,6 +10,10 @@ public class VariaveisAmbienteProvider : IVariaveisAmbienteProvider
 
     public HashSet<string> Tenants => _tenants;
 
+    public string? UrlBaseCursos => Buscar(VariaveisAmbienteConstantes.URL_BASE_CURSOS);
+
+    public string? PathObterCursos => Buscar(VariaveisAmbienteConstantes.PATH_OBTER_CURSOS);
+
     private readonly HashSet<string> _tenants;
 
     public VariaveisAmbienteProvider()

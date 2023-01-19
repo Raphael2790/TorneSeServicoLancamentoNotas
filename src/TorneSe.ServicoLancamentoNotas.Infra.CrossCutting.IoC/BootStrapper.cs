@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Behaviors;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
@@ -10,6 +11,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.Validacoes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SerializerContext;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
@@ -32,7 +34,8 @@ public static class BootStrapper
             .RegistrarProviders()
             .RegistrarValidacoes()
             .RegistrarComportamentos()
-            .RegistrarClients();
+            .RegistrarClients()
+            .RegistrarSerializers();
     }
 
     private static IServiceCollection RegistrarRepositorios(this IServiceCollection services)
@@ -70,8 +73,14 @@ public static class BootStrapper
 
     private static IServiceCollection RegistrarClients(this IServiceCollection services)
     {
-        services.AddHttpClient<ICursoClient, CursoClient>("curso");
+        services.AddHttpClient<ICursoClient, CursoClient>();
 
         return services;
     }
+
+    private static IServiceCollection RegistrarSerializers(this IServiceCollection services)
+        => services.AddSingleton(_ =>
+        {
+            return new CursoSerializerContext(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        });
 }

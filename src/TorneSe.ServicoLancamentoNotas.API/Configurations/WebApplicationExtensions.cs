@@ -30,6 +30,8 @@ public static class WebApplicationExtensions
         Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESECSHARP", "Server=localhost;Database=TorneSeCsharp;Port=3306;Uid=root;Pwd=root;Pooling=True;");
         Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVA", "Server=localhost;Database=TorneSeJava;Port=3306;Uid=root;Pwd=root;Pooling=True;");
         Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVASCRIPT", "Server=localhost;Database=TorneSeJavascript;Port=3306;Uid=root;Pwd=root;Pooling=True;");
+        Environment.SetEnvironmentVariable("URL_BASE_CURSOS", "https://localhost:7295/");
+        Environment.SetEnvironmentVariable("PATH_OBTER_CURSOS", "obterCurso");
 
         startupApplication.ConfigureServices(applicationBuilder.Services);
 

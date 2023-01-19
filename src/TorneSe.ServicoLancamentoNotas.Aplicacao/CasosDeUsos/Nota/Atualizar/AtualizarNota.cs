@@ -11,22 +11,20 @@ using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 
 namespace TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar;
 
-public class AtualizarNota : IAtualizarNota
+public class AtualizarNota : NotaHandler, IAtualizarNota
 {
     private readonly INotaRepository _notaRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AtualizarNota> _logger;
-    private readonly ICursoClient _cursoClient;
 
     public AtualizarNota(INotaRepository notaRepository,
                          IUnitOfWork unitOfWork,
                          ILogger<AtualizarNota> logger,
-                         ICursoClient cursoClient)
+                         ICursoClient cursoClient) : base(cursoClient)
     {
         _notaRepository = notaRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
-        _cursoClient = cursoClient;
     }
 
     public async Task<Resultado<NotaOutputModel>> Handle(AtualizarNotaInput request, CancellationToken cancellationToken)
@@ -43,6 +41,12 @@ public class AtualizarNota : IAtualizarNota
             if (!nota.EhValida)
                 return Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.NotaInvalida,
                     nota.Notificacoes.Select(notificacao => new DetalheErro(notificacao.Campo, notificacao.Mensagem)).ToList());
+
+            var (valido, detalhes) = await ValidarInformacoesAlunoCurso(
+                new ValidacaoCursoInput(request.AlunoId, request.ProfessorId, request.AtividadeId), cancellationToken);
+
+            if (!valido && detalhes.Any())
+                return Resultado<NotaOutputModel>.RetornaResultadoErro(TipoErro.NaoFoiPossivelValidarVinculosCurso, detalhes);
 
             await _notaRepository.Atualizar(nota, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
