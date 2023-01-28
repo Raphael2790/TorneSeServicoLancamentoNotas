@@ -8,7 +8,9 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SerializerContext;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
 
@@ -33,7 +35,11 @@ public class CancelarNotaTests
         _notaRepository = new NotaRepository(_context);
         var loggerFactory = new LoggerFactory();
         _logger = loggerFactory.CreateLogger<CancelarNota>();
-        _cursoClient = new CursoClient(new HttpClient(), loggerFactory.CreateLogger<CursoClient>());
+        _cursoClient = new CursoClient(
+            new HttpClient(), 
+            loggerFactory.CreateLogger<CursoClient>(),
+            new VariaveisAmbienteProvider(),
+            new CursoSerializerContext());
         _sut = new CancelarNota(_notaRepository, _unitOfWork, _logger, _cursoClient);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();

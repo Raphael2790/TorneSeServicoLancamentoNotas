@@ -8,4 +8,14 @@ public class Atividade
     public DateTime DataInicio { get; set; }
     public DateTime DataTermino { get; set; }
     public Professor Professor { get; set; }
+
+    public Atividade(int id, string nome, bool ativo, DateTime dataInicio, DateTime dataTermino, Professor professor)
+    {
+        Id = id;
+        Nome = nome;
+        Ativo = ativo;
+        DataInicio = dataInicio;
+        DataTermino = dataTermino;
+        Professor = professor;
+    }
 }

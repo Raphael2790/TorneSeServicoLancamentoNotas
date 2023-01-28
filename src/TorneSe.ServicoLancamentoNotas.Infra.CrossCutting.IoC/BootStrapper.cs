@@ -13,6 +13,8 @@ using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SerializerContext;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Factories;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Factories.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
@@ -69,11 +71,16 @@ public static class BootStrapper
 
     private static IServiceCollection RegistrarProviders(this IServiceCollection services)
         => services.AddScoped<ITenantProvider, TenantProvider>()
-                   .AddScoped<IVariaveisAmbienteProvider, VariaveisAmbienteProvider>();
+                   .AddSingleton<IVariaveisAmbienteProvider, VariaveisAmbienteProvider>();
 
     private static IServiceCollection RegistrarClients(this IServiceCollection services)
     {
-        services.AddHttpClient<ICursoClient, CursoClient>();
+        services.AddSingleton<ICursoClientResilienciaFactory, CursoClientResilienciaFactory>();
+
+        services.AddHttpClient<ICursoClient, CursoClient>()
+            .AddPolicyHandler((prov, _) => prov.GetService<ICursoClientResilienciaFactory>()?.CircuitBreak())
+            .AddPolicyHandler((prov, _) => prov.GetService<ICursoClientResilienciaFactory>()?.Retry())
+            .AddPolicyHandler((prov, _) => prov.GetService<ICursoClientResilienciaFactory>()?.Timeout());
 
         return services;
     }

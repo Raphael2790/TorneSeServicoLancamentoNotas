@@ -32,6 +32,10 @@ public static class WebApplicationExtensions
         Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVASCRIPT", "Server=localhost;Database=TorneSeJavascript;Port=3306;Uid=root;Pwd=root;Pooling=True;");
         Environment.SetEnvironmentVariable("URL_BASE_CURSOS", "https://localhost:7295/");
         Environment.SetEnvironmentVariable("PATH_OBTER_CURSOS", "obterCurso");
+        Environment.SetEnvironmentVariable("TIMEOUT", "7");
+        Environment.SetEnvironmentVariable("NUMERO_RETENTATIVAS", "3");
+        Environment.SetEnvironmentVariable("DURACAO_CIRCUITO_ABERTO", "30");
+        Environment.SetEnvironmentVariable("NUMERO_ERROS_PARA_ABERTURA_CIRCUITO", "6");
 
         startupApplication.ConfigureServices(applicationBuilder.Services);
 

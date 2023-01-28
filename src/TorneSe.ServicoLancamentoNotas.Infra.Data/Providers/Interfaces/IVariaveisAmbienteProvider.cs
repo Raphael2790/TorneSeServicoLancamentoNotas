@@ -8,4 +8,8 @@ public interface IVariaveisAmbienteProvider
     string? ObterConnectionStringPorTenant(Tenant tenant);
     string? UrlBaseCursos { get; }
     string? PathObterCursos { get; }
+    int ErrosAntesDeAbrirCircuito { get; }
+    TimeSpan DuracaoCircuito { get; }
+    int NumeroRetentativas { get; }
+    int Timeout { get; }
 }
