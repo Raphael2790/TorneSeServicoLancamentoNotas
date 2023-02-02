@@ -49,4 +49,12 @@ public class NotaRepository : INotaRepository
 
     public async Task Inserir(Nota agregado, CancellationToken cancellationToken)
         => await _contextoNota.AddAsync(agregado, cancellationToken);
+
+    public async Task<Nota?> Buscar(Guid id, CancellationToken cancellation)
+        => await _contextoNota.FirstOrDefaultAsync(nota => nota.Id == id, cancellation);
+
+    public async Task<bool> ExisteNotaCanceladaPorAlunoEAtividade(int alunoId, int atividadeId, CancellationToken cancellationToken) =>
+        await _contextoNota.AnyAsync(nota =>
+            nota.AlunoId == alunoId && nota.AtividadeId == atividadeId && nota.Cancelada &&
+            nota.CanceladaPorRetentativa, cancellationToken);
 }

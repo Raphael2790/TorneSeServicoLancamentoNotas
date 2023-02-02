@@ -5,6 +5,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mapeadores;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
+using TorneSe.ServicoLancamentoNotas.Dominio.SeedWork.BuscaRepository;
 
 namespace TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar;
 
@@ -24,7 +25,7 @@ public class ConsultaNota : IConsultaNota
     {
         try
         {
-            var buscaOutput = await _notaRepository.Buscar(new(request.Pagina, request.PorPagina, request.AlunoId,
+            var buscaOutput = await _notaRepository.Buscar(new BuscaInput(request.Pagina, request.PorPagina, request.AlunoId,
                                                             request.AtividadeId, request.OrdenarPor, request.Ordenacao), cancellationToken);
 
             ListaNotaOutput retorno = new(buscaOutput.Pagina, buscaOutput.PorPagina, buscaOutput.Total,

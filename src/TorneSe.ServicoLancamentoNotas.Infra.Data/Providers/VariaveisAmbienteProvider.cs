@@ -10,6 +10,7 @@ public class VariaveisAmbienteProvider : IVariaveisAmbienteProvider
     private readonly int NUMERO_RETENTATIVAS_PADRAO = 4;
     private readonly int DURACAO_CIRCUITO_ABERTO_PADRAO = 60;
     private readonly int NUMERO_ERROS_PARA_ABERTURA_CIRCUITO_PADRAO = 10;
+    private readonly int WAIT_TIME_SECONDS_DEFAULT = 30;
 
     public static readonly VariaveisAmbienteProvider Instance = new VariaveisAmbienteProvider();
 
@@ -33,6 +34,13 @@ public class VariaveisAmbienteProvider : IVariaveisAmbienteProvider
 
     public int Timeout => int.TryParse(Buscar(VariaveisAmbienteConstantes.TIMEOUT),
             out int timeout) ? timeout : TIMEOUT_PADRAO;
+
+    public int WaitTimeSeconds => int.TryParse(Buscar(VariaveisAmbienteConstantes.WAIT_TIME_SECONDS),
+            out int segundos) ? segundos : WAIT_TIME_SECONDS_DEFAULT;
+
+    public string? AwsAccessKey => Buscar(VariaveisAmbienteConstantes.AWS_ACCESS_KEY);
+
+    public string? AwsSecretAccessKey => Buscar(VariaveisAmbienteConstantes.AWS_SECRET_ACCESS_KEY);
 
     private readonly HashSet<string> _tenants;
 
@@ -61,4 +69,6 @@ public class VariaveisAmbienteProvider : IVariaveisAmbienteProvider
 
     private string? Buscar(string nome)
         => Environment.GetEnvironmentVariable(nome);
+
+    public string? ObterNomeFila(string nomeFila) => Buscar(nomeFila);
 }

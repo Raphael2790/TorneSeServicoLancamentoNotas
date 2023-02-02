@@ -61,7 +61,7 @@ public class AtualizarNotaTests
         _unitOfWorkMock.Verify(x => x.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
 
-    [Fact(DisplayName = nameof(Handle_QuandoAtualizarInput_DeveRetonarResultadoDeSucesso))]
+    [Fact(DisplayName = nameof(Handle_QuandoVinculoCursoNaoIdentificado_DeveRetonarResultadoErro))]
     [Trait("Aplicacao", "Nota - Casos de Uso")]
     public async Task Handle_QuandoVinculoCursoNaoIdentificado_DeveRetonarResultadoErro()
     {

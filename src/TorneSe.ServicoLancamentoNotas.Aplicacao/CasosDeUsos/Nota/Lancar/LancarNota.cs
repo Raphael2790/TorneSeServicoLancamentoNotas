@@ -4,6 +4,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.DTOs;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Lancar.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.Eventos;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mapeadores;
 using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
@@ -16,15 +17,18 @@ public sealed class LancarNota : NotaHandler, ILancarNota
     private readonly INotaRepository _notaRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<LancarNota> _logger;
+    private readonly IMediatorHandler _mediatorHandler;
 
     public LancarNota(INotaRepository notaRepository,
                       IUnitOfWork unitOfWork,
                       ILogger<LancarNota> logger,
-                      ICursoClient cursoClient) : base(cursoClient)
+                      ICursoClient cursoClient,
+                      IMediatorHandler mediatorHandler) : base(cursoClient)
     {
         _notaRepository = notaRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _mediatorHandler = mediatorHandler;
     }
 
     public async Task<Resultado<NotaOutputModel>> Handle(LancarNotaInput request, CancellationToken cancellationToken)
@@ -48,6 +52,8 @@ public sealed class LancarNota : NotaHandler, ILancarNota
 
             await _notaRepository.Inserir(novaNota, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
+
+            await _mediatorHandler.PublicarEvento(new NotaLancadaEvento(novaNota.Id), cancellationToken);
 
             return Resultado<NotaOutputModel>.RetornaResultadoSucesso(MapeadorAplicacao.NotaEmNotaOuputModel(novaNota));
         }

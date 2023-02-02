@@ -36,6 +36,10 @@ public static class WebApplicationExtensions
         Environment.SetEnvironmentVariable("NUMERO_RETENTATIVAS", "3");
         Environment.SetEnvironmentVariable("DURACAO_CIRCUITO_ABERTO", "30");
         Environment.SetEnvironmentVariable("NUMERO_ERROS_PARA_ABERTURA_CIRCUITO", "6");
+        Environment.SetEnvironmentVariable("NOTAS_LANCADAS_QUEUE", "Nota_Lancada_HLG");
+        Environment.SetEnvironmentVariable("AWS_LONGPOOLING", "20");
+        Environment.SetEnvironmentVariable("AWS_ACCESS_KEY", "valor");
+        Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", "valor");
 
         startupApplication.ConfigureServices(applicationBuilder.Services);
 

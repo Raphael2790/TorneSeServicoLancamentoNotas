@@ -12,4 +12,8 @@ public interface IVariaveisAmbienteProvider
     TimeSpan DuracaoCircuito { get; }
     int NumeroRetentativas { get; }
     int Timeout { get; }
+    int WaitTimeSeconds { get; }
+    string? AwsAccessKey { get; }
+    string? AwsSecretAccessKey { get; }
+    string? ObterNomeFila(string nomeFila);
 }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Cancelar;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Cancelar.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
@@ -13,6 +14,7 @@ using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
+using TornseSe.ServicoLancamentoNotas.TestesIntegracao.FakeComponents.CursoClient;
 
 namespace TornseSe.ServicoLancamentoNotas.TestesIntegracao.Aplicacao.CasosDeUso.Nota.Cancelar;
 
@@ -35,11 +37,7 @@ public class CancelarNotaTests
         _notaRepository = new NotaRepository(_context);
         var loggerFactory = new LoggerFactory();
         _logger = loggerFactory.CreateLogger<CancelarNota>();
-        _cursoClient = new CursoClient(
-            new HttpClient(), 
-            loggerFactory.CreateLogger<CursoClient>(),
-            new VariaveisAmbienteProvider(),
-            new CursoSerializerContext());
+        _cursoClient = new CursoFakeClient();
         _sut = new CancelarNota(_notaRepository, _unitOfWork, _logger, _cursoClient);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();

@@ -12,6 +12,9 @@ using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SerializerContext;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS.Contexto;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS.Contexto.Interface;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Factories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Factories.Interfaces;
@@ -37,7 +40,9 @@ public static class BootStrapper
             .RegistrarValidacoes()
             .RegistrarComportamentos()
             .RegistrarClients()
-            .RegistrarSerializers();
+            .RegistrarSerializers()
+            .RegistrarContextoSqs()
+            .RegistrarMensagemClients();
     }
 
     private static IServiceCollection RegistrarRepositorios(this IServiceCollection services)
@@ -90,4 +95,10 @@ public static class BootStrapper
         {
             return new CursoSerializerContext(new JsonSerializerOptions(JsonSerializerDefaults.Web));
         });
+
+    private static IServiceCollection RegistrarContextoSqs(this IServiceCollection services)
+        => services.AddSingleton<ISqsContexto, SqsContexto>();
+
+    private static IServiceCollection RegistrarMensagemClients(this IServiceCollection services)
+        => services.AddScoped<INotaLancadaMensagemClient, NotaLancadaMensagemClient>();
 }
