@@ -14,4 +14,5 @@ public static class VariaveisAmbienteConstantes
     public const string WAIT_TIME_SECONDS = "WAIT_TIME_SECONDS";
     public const string AWS_ACCESS_KEY = "AWS_ACCESS_KEY";
     public const string AWS_SECRET_ACCESS_KEY = "AWS_SECRET_ACCESS_KEY";
+    public const string ELASTICSEARCH_URL = "ELASTICSEARCH_URL";
 }

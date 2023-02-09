@@ -8,14 +8,14 @@ namespace TorneSe.ServicoLancamentoNotas.API.Configurations;
 
 public static class ConfigurarInjecaoDependenciaExtension
 {
-    public static IServiceCollection ConfigurarServicos(this IServiceCollection services)
+    public static IServiceCollection ConfigurarServicos(this IServiceCollection services, IHostEnvironment environment, IConfiguration configuration)
     {
         services.AddControllers(options =>
         {
             options.Filters.Add(typeof(ApiGlobalExceptionFilter));
         })
         .AdicionarSerializerContext();
-        services.RegistrarServicos();
+        services.RegistrarServicos(environment, configuration);
         services.AddEndpointsApiExplorer();
         services.AddHttpContextAccessor();
         services.AddScoped<BuscaTenantMiddleware>();

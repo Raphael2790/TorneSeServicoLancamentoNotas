@@ -1,20 +1,17 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
-using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
-using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SerializerContext;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
-using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
 using TornseSe.ServicoLancamentoNotas.TestesIntegracao.FakeComponents.CursoClient;
+using TornseSe.ServicoLancamentoNotas.TestesIntegracao.FakeComponents.Mediator;
 
 namespace TornseSe.ServicoLancamentoNotas.TestesIntegracao.Aplicacao.CasosDeUso.Nota.Atualizar;
 
@@ -38,7 +35,8 @@ public class AtualizarNotaTests
         var loggerFactory = new LoggerFactory();
         _logger = loggerFactory.CreateLogger<AtualizarNota>();
         _cursoClient = new CursoFakeClient();
-        _sut = new AtualizarNota(_notaRepository, _unitOfWork, _logger, _cursoClient);
+        var mediatorFake = new MediatorFakeHandler();
+        _sut = new AtualizarNota(_notaRepository, _unitOfWork, _logger, _cursoClient, mediatorFake);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
     }

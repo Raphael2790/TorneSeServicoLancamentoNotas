@@ -7,23 +7,23 @@ using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
 
 namespace TorneSe.ServicoLancamentoNotas.Aplicacao.EventosHandlers;
 
-public class NotaAtualizadaEventoHandler : INotaAtualizadaEventoHandler
+public class NotaCanceladaEventoHandler : INotaCanceladaEventoHandler
 {
-    private readonly INotaAtualizadaMensagemClient _mensagemClient;
-    private INotaRepository _notaRepository;
-    private ILogger<NotaLancadaEventoHandler> _logger;
+    private readonly INotaCanceladaMensagemClient _mensagemClient;
+    private readonly INotaRepository _notaRepository;
+    private readonly ILogger<NotaCanceladaEventoHandler> _logger;
 
-    public NotaAtualizadaEventoHandler(
-        INotaAtualizadaMensagemClient mensagemClient, 
+    public NotaCanceladaEventoHandler(
+        INotaCanceladaMensagemClient mensagemClient, 
         INotaRepository notaRepository, 
-        ILogger<NotaLancadaEventoHandler> logger)
+        ILogger<NotaCanceladaEventoHandler> logger)
     {
         _mensagemClient = mensagemClient;
         _notaRepository = notaRepository;
         _logger = logger;
     }
 
-    public async Task Handle(NotaAtualizadaEvento notification, CancellationToken cancellationToken)
+    public async Task Handle(NotaCanceladaEvento notification, CancellationToken cancellationToken)
     {
         var nota = await _notaRepository.Buscar(notification.NotaId, cancellationToken);
 
@@ -33,11 +33,12 @@ public class NotaAtualizadaEventoHandler : INotaAtualizadaEventoHandler
             return;
         }
 
-        var mensagem = NotaAtualizadaMensagem.DeNota(nota, notification.CorrelationId);
+        var mensagem = NotaCanceladaMensagem.DeNota(nota, notification.CorrelationId);
 
         nota.AlterarStatusIntegracaoParaEnviada();
 
         await _notaRepository.Atualizar(nota, cancellationToken);
+
         await _mensagemClient.EnviarMensagem(mensagem);
     }
 }

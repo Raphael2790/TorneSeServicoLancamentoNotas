@@ -42,6 +42,8 @@ public class VariaveisAmbienteProvider : IVariaveisAmbienteProvider
 
     public string? AwsSecretAccessKey => Buscar(VariaveisAmbienteConstantes.AWS_SECRET_ACCESS_KEY);
 
+    public string ElasticSearchUrl => Buscar(VariaveisAmbienteConstantes.ELASTICSEARCH_URL)!;
+
     private readonly HashSet<string> _tenants;
 
     public VariaveisAmbienteProvider()

@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using System.Text.Json;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Exceptions;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
 
 namespace TorneSe.ServicoLancamentoNotas.API.Middlewares;
@@ -15,6 +16,9 @@ public class BuscaTenantMiddleware : IMiddleware
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var tenant = _tenantProvider.ObterTenant();
+
+        if (tenant.Origem == "health")
+            tenant = VariaveisAmbienteProvider.Instance.Tenants.First();
 
         if (_tenantProvider.ValidarTenant(tenant))
         {

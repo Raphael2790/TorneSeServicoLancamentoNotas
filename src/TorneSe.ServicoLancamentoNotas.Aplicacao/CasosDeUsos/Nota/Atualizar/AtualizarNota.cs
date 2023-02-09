@@ -4,6 +4,7 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Atualizar.Interf
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Comum;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Enums;
+using TorneSe.ServicoLancamentoNotas.Aplicacao.Eventos;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Mapeadores;
 using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
@@ -16,15 +17,18 @@ public class AtualizarNota : NotaHandler, IAtualizarNota
     private readonly INotaRepository _notaRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<AtualizarNota> _logger;
+    private readonly IMediatorHandler _mediatorHandler;
 
     public AtualizarNota(INotaRepository notaRepository,
                          IUnitOfWork unitOfWork,
                          ILogger<AtualizarNota> logger,
-                         ICursoClient cursoClient) : base(cursoClient)
+                         ICursoClient cursoClient, 
+                         IMediatorHandler mediatorHandler) : base(cursoClient)
     {
         _notaRepository = notaRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _mediatorHandler = mediatorHandler;
     }
 
     public async Task<Resultado<NotaOutputModel>> Handle(AtualizarNotaInput request, CancellationToken cancellationToken)
@@ -50,6 +54,8 @@ public class AtualizarNota : NotaHandler, IAtualizarNota
 
             await _notaRepository.Atualizar(nota, cancellationToken);
             await _unitOfWork.Commit(cancellationToken);
+
+            await _mediatorHandler.PublicarEvento(new NotaAtualizadaEvento(nota.Id), cancellationToken);
 
             return Resultado<NotaOutputModel>.RetornaResultadoSucesso(MapeadorAplicacao.NotaEmNotaOuputModel(nota));
         }

@@ -7,11 +7,11 @@ using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
 
 namespace TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS;
 
-public class NotaLancadaMensagemClient : SqsClient<NotaLancadaMensagem>, INotaLancadaMensagemClient
+public class NotaAtualizadaMensagemClient : SqsClient<NotaAtualizadaMensagem>, INotaAtualizadaMensagemClient
 {
-    public const string SQS_NOTA_LANCADA_QUEUE_NAME = "NOTAS_LANCADAS_QUEUE";
-    public NotaLancadaMensagemClient(ISqsContexto sqsContexto, ILogger<NotaLancadaMensagemClient> logger, ITenantProvider tenantProvider) 
-        : base(sqsContexto, SQS_NOTA_LANCADA_QUEUE_NAME, logger, tenantProvider)
+    public const string SQS_NOTA_ATUALIZADA_QUEUE_NAME = "NOTAS_ATUALIZADAS_QUEUE";
+    public NotaAtualizadaMensagemClient(ISqsContexto sqsContexto, ILogger<NotaAtualizadaMensagemClient> logger, ITenantProvider tenantProvider) 
+        : base(sqsContexto, SQS_NOTA_ATUALIZADA_QUEUE_NAME , logger, tenantProvider)
     {
     }
 }

@@ -9,9 +9,9 @@ namespace TorneSe.ServicoLancamentoNotas.Aplicacao.EventosHandlers;
 
 public class NotaLancadaEventoHandler : INotaLancadaEventoHandler
 {
-    private INotaLancadaMensagemClient _mensagemClient;
-    private INotaRepository _notaRepository;
-    private ILogger<NotaLancadaEventoHandler> _logger;
+    private readonly INotaLancadaMensagemClient _mensagemClient;
+    private readonly INotaRepository _notaRepository;
+    private readonly ILogger<NotaLancadaEventoHandler> _logger;
 
     public NotaLancadaEventoHandler(
         INotaLancadaMensagemClient mensagemClient, 
@@ -37,6 +37,10 @@ public class NotaLancadaEventoHandler : INotaLancadaEventoHandler
             .ExisteNotaCanceladaPorAlunoEAtividade(nota.AlunoId, nota.AtividadeId, cancellationToken);
 
         var mensagem = NotaLancadaMensagem.DeNota(nota, notification.CorrelationId, existeNotaJaCancelada);
+
+        nota.AlterarStatusIntegracaoParaEnviada();
+
+        await _notaRepository.Atualizar(nota, cancellationToken);
 
         await _mensagemClient.EnviarMensagem(mensagem);
     }

@@ -22,6 +22,7 @@ public class AtualizarNotaTests
     private readonly Mock<INotaRepository> _repositoryMock;
     private readonly Mock<ILogger<AtualizarNota>> _loggerMock;
     private readonly Mock<ICursoClient> _cursoClientMock;
+    private readonly Mock<IMediatorHandler> _mediatorMock;
     private readonly AtualizarNota _sut;
 
     public AtualizarNotaTests(AtualizarNotaTestsFixture fixture)
@@ -30,8 +31,9 @@ public class AtualizarNotaTests
         _repositoryMock = new();
         _unitOfWorkMock = new();
         _loggerMock = new();
-        _cursoClientMock = new Mock<ICursoClient>();
-        _sut = new(_repositoryMock.Object, _unitOfWorkMock.Object, _loggerMock.Object, _cursoClientMock.Object);
+        _cursoClientMock = new();
+        _mediatorMock = new();
+        _sut = new(_repositoryMock.Object, _unitOfWorkMock.Object, _loggerMock.Object, _cursoClientMock.Object, _mediatorMock.Object);
     }
 
     [Fact(DisplayName = nameof(Handle_QuandoAtualizarInput_DeveRetonarResultadoDeSucesso))]

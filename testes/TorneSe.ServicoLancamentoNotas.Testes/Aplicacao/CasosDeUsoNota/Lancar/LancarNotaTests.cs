@@ -22,16 +22,18 @@ public class LancarNotaTests
     private readonly Mock<IUnitOfWork> _unitOfWork;
     private readonly Mock<ILogger<LancarNota>> _logger;
     private readonly Mock<ICursoClient> _cursoClientMock;
+    private readonly Mock<IMediatorHandler> _mediatorMock;
     private readonly ILancarNota _sut;
 
     public LancarNotaTests(LancarNotaTestsFixture fixture)
     {
         _fixture = fixture;
-        _notaRepository = new Mock<INotaRepository>();
-        _unitOfWork = new Mock<IUnitOfWork>();
-        _logger = new Mock<ILogger<LancarNota>>();
-        _cursoClientMock = new Mock<ICursoClient>();
-        _sut = new LancarNota(_notaRepository.Object, _unitOfWork.Object, _logger.Object, _cursoClientMock.Object);
+        _notaRepository = new();
+        _unitOfWork = new();
+        _logger = new();
+        _cursoClientMock = new();
+        _mediatorMock= new();
+        _sut = new LancarNota(_notaRepository.Object, _unitOfWork.Object, _logger.Object, _cursoClientMock.Object, _mediatorMock.Object);
     }
 
     [Fact(DisplayName = nameof(Handle_QuandoNotaValida_DeveSerSalva))]

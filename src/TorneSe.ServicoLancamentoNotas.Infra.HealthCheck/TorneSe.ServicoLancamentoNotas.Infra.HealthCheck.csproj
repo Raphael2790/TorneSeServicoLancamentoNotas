@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Aws.Sqs" Version="6.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.MySql" Version="6.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.Uris" Version="6.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TorneSe.ServicoLancamentoNotas.Infra.Data\TorneSe.ServicoLancamentoNotas.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>

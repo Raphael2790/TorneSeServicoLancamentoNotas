@@ -15,6 +15,7 @@ using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
 using TornseSe.ServicoLancamentoNotas.TestesIntegracao.FakeComponents.CursoClient;
+using TornseSe.ServicoLancamentoNotas.TestesIntegracao.FakeComponents.Mediator;
 
 namespace TornseSe.ServicoLancamentoNotas.TestesIntegracao.Aplicacao.CasosDeUso.Nota.Cancelar;
 
@@ -38,7 +39,8 @@ public class CancelarNotaTests
         var loggerFactory = new LoggerFactory();
         _logger = loggerFactory.CreateLogger<CancelarNota>();
         _cursoClient = new CursoFakeClient();
-        _sut = new CancelarNota(_notaRepository, _unitOfWork, _logger, _cursoClient);
+        var mediatorFake = new MediatorFakeHandler();
+        _sut = new CancelarNota(_notaRepository, _unitOfWork, _logger, _cursoClient, mediatorFake);
         _context.Database.EnsureDeleted();
         _context.Database.EnsureCreated();
     }

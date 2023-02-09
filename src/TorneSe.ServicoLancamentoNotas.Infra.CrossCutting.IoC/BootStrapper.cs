@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Text.Json;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Behaviors;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.CasosDeUsos.Nota.Consultar;
@@ -10,11 +12,13 @@ using TorneSe.ServicoLancamentoNotas.Aplicacao.Mediator;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Validacoes;
 using TorneSe.ServicoLancamentoNotas.Dominio.Clients;
 using TorneSe.ServicoLancamentoNotas.Dominio.Repositories;
+using TorneSe.ServicoLancamentoNotas.Infra.CrossCutting.IoC.Extensions;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.Curso;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SerializerContext;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Clients.SQS.Contexto.Interface;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Configuracoes;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Factories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Factories.Interfaces;
@@ -23,12 +27,13 @@ using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers.Interfaces;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Repositories;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.UoW;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Visitors;
+using TorneSe.ServicoLancamentoNotas.Infra.HealthCheck;
 
 namespace TorneSe.ServicoLancamentoNotas.Infra.CrossCutting.IoC;
 
 public static class BootStrapper
 {
-    public static void RegistrarServicos(this IServiceCollection services)
+    public static void RegistrarServicos(this IServiceCollection services, IHostEnvironment environment, IConfiguration configuration)
     {
         services
             .RegistrarRepositorios()
@@ -42,7 +47,10 @@ public static class BootStrapper
             .RegistrarClients()
             .RegistrarSerializers()
             .RegistrarContextoSqs()
-            .RegistrarMensagemClients();
+            .RegistrarMensagemClients()
+            .CarregarVariaveisDeAmbiente(environment.IsDevelopment())
+            .AdicionarConfiguracoesHealthChecks()
+            .ConfigurarSerilog(configuration, environment);
     }
 
     private static IServiceCollection RegistrarRepositorios(this IServiceCollection services)
@@ -100,5 +108,15 @@ public static class BootStrapper
         => services.AddSingleton<ISqsContexto, SqsContexto>();
 
     private static IServiceCollection RegistrarMensagemClients(this IServiceCollection services)
-        => services.AddScoped<INotaLancadaMensagemClient, NotaLancadaMensagemClient>();
+        => services.AddScoped<INotaLancadaMensagemClient, NotaLancadaMensagemClient>()
+                   .AddScoped<INotaCanceladaMensagemClient, NotaCanceladaMensagemClient>()
+                   .AddScoped<INotaAtualizadaMensagemClient, NotaAtualizadaMensagemClient>();
+
+    private static IServiceCollection CarregarVariaveisDeAmbiente(this IServiceCollection services, bool ehDesenvolvimento) 
+    {
+        if (ehDesenvolvimento)
+            ArquivoEnv.CarregarVariaveis();
+
+        return services;
+    }
 }
