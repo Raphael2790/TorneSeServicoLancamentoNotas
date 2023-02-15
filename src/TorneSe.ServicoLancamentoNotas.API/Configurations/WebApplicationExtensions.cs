@@ -49,7 +49,7 @@ public static class WebApplicationExtensions
 
         startupApplication.ConfigureServices(applicationBuilder.Services, applicationBuilder.Environment, applicationBuilder.Configuration);
 
-        applicationBuilder.WebHost.UseSerilog();
+        applicationBuilder.Host.UseSerilog();
 
         var app = applicationBuilder.Build();
 
