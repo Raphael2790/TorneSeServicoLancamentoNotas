@@ -24,11 +24,13 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       
-    #- name: Test
-    #  run: dotnet test --no-build --verbosity normal
-      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
     - name: Publish
-      run: dotnet publish -c Release -o '${{ github.workspace }}/out'
+      run: |
+           cd /home/runner/work/TorneSeServicoLancamentoNotas/TorneSeServicoLancamentoNotas/src/TorneSe.ServicoLancamentoNotas.API  
+           dotnet publish -c Release -o '${{ github.workspace }}/out'
       
     - name: Zip package
       run: |
