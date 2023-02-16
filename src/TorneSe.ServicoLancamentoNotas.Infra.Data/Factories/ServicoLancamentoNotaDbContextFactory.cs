@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using TorneSe.ServicoLancamentoNotas.Aplicacao.Exceptions;
 using TorneSe.ServicoLancamentoNotas.Dominio.ValueObjects;
+using TorneSe.ServicoLancamentoNotas.Infra.Data.Configuracoes;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Contexto;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Providers;
 using TorneSe.ServicoLancamentoNotas.Infra.Data.Visitors;
@@ -12,10 +13,7 @@ public class ServicoLancamentoNotaDbContextFactory : IDesignTimeDbContextFactory
 {
     public ServicoLancamentoNotaDbContext CreateDbContext(string[] args)
     {
-        Environment.SetEnvironmentVariable("TENANTS", "torne-se-csharp;torne-se-javascript;torne-se-java");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESECSHARP", "Server=localhost;Database=TorneSeCsharp;Port=3306;Uid=root;Pwd=root;Pooling=True;");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVA", "Server=localhost;Database=TorneSeJava;Port=3306;Uid=root;Pwd=root;Pooling=True;");
-        Environment.SetEnvironmentVariable("CONNECTION_STRING_TORNESEJAVASCRIPT", "Server=localhost;Database=TorneSeJavascript;Port=3306;Uid=root;Pwd=root;Pooling=True;");
+        ArquivoEnv.CarregarVariaveis();
 
         //-args torne-se-java
         Tenant tenant = args[^1];
