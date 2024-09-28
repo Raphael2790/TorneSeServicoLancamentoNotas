@@ -66,7 +66,10 @@ public static class BootStrapper
         });
 
     private static IServiceCollection RegistrarHandlers(this IServiceCollection services)
-        => services.AddMediatR(typeof(ConsultaNota));
+        => services.AddMediatR(opt =>
+        {
+            opt.RegisterServicesFromAssembly(typeof(ConsultaNota).Assembly);
+        });
 
     private static IServiceCollection RegistrarValidacoes(this IServiceCollection services)
         => services.AddValidatorsFromAssembly(typeof(LancarNotaInputValidator).Assembly);

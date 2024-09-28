@@ -21,11 +21,11 @@ public static class WebApplicationExtensions
 
         app.MapControllers();
 
-        app.UseHealthChecks("/health", new HealthCheckOptions
-        {
-            Predicate = p => true,
-            ResponseWriter = ResponseWriter
-        });
+        //app.UseHealthChecks("/health", new HealthCheckOptions
+        //{
+        //    Predicate = p => true,
+        //    ResponseWriter = ResponseWriter
+        //});
 
         return app;
     }
